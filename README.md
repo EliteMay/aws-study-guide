@@ -23,11 +23,22 @@ AWSを「サービス名の暗記」ではなく、**役割・使い分け・構
 - 学習進捗ダッシュボード
 - `localStorage` による端末内保存
 
-## 公開予定URL
+## GitHub Pages
+
+公開URL:
 
 https://elitemay.github.io/aws-study-guide/
 
-GitHub Pagesが未有効の場合は、Repository Settings → Pages から公開を有効にしてください。
+初回だけRepositoryの **Settings → Pages** で次を設定します。
+
+```text
+Build and deployment
+Source: Deploy from a branch
+Branch: main
+Folder: / (root)
+```
+
+保存後は `main` の静的ファイルがGitHub Pagesから公開されます。
 
 ## ファイル構成
 
@@ -42,6 +53,8 @@ aws-study-guide/
 ├─ data/
 │  ├─ manifest.json
 │  └─ aws-core.json
+├─ tests/
+│  └─ validate.mjs
 ├─ REQUIREMENTS.md
 ├─ SPEC.md
 ├─ PROJECT_LEARNINGS.md
@@ -60,6 +73,20 @@ awsStudyGuide.progress.v1
 ```
 
 教材そのものはGitHub上のJSONを正本とします。
+
+## Validation
+
+push / pull request時にGitHub Actionsで次を確認します。
+
+- JavaScript構文
+- JSON構文
+- Manifest件数
+- Topic / Quiz ID参照
+- 必須フィールド
+- `index.html` のローカル参照
+- 公開ファイルへの典型的な秘密情報混入
+
+共通Baselineは `EliteMay/.github` のReusable WorkflowをCommit SHA固定で利用し、Project固有Validationは `tests/validate.mjs` に残しています。
 
 ## 情報方針
 
