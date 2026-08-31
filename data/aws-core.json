@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "categories": [
+    {"id":"foundation","label":"基礎","order":1},
+    {"id":"security","label":"セキュリティ","order":2},
+    {"id":"compute","label":"コンピューティング","order":3},
+    {"id":"storage","label":"ストレージ","order":4},
+    {"id":"network","label":"ネットワーク","order":5},
+    {"id":"database","label":"データベース","order":6},
+    {"id":"serverless","label":"サーバーレス / 連携","order":7},
+    {"id":"operations","label":"監視・運用・料金","order":8},
+    {"id":"architecture","label":"設計","order":9}
+  ],
+  "roadmap": [
+    {"step":1,"title":"クラウドの土台","description":"クラウド、リージョン、AZ、責任共有モデルを理解する。","topicIds":["cloud-basics","regions-az","shared-responsibility"]},
+    {"step":2,"title":"まず守る","description":"IAMを中心に、誰が何をできるかを理解する。","topicIds":["iam"]},
+    {"step":3,"title":"サーバーと保存先","description":"EC2と主要ストレージの違いをつかむ。","topicIds":["ec2","autoscaling-elb","s3","ebs-efs"]},
+    {"step":4,"title":"ネットワーク","description":"VPCと名前解決・配信の役割を整理する。","topicIds":["vpc","route53-cloudfront"]},
+    {"step":5,"title":"データを置く","description":"RDSとDynamoDBを要件から選べるようにする。","topicIds":["rds","dynamodb"]},
+    {"step":6,"title":"疎結合・サーバーレス","description":"Lambda、API Gateway、SQS、SNS、EventBridgeの役割をつなげる。","topicIds":["lambda-apigw","sqs-sns-eventbridge"]},
+    {"step":7,"title":"運用する","description":"CloudWatch、CloudTrail、料金管理を区別する。","topicIds":["cloudwatch","cloudtrail-config","cost"]},
+    {"step":8,"title":"設計で考える","description":"Well-Architectedの6本柱で構成を評価する。","topicIds":["wellarchitected"]}
+  ],
+  "topics": [
+    {
+      "id":"cloud-basics","title":"AWSとクラウドの基本","service":"AWS Cloud","category":"foundation","level":"入門","summary":"必要なITリソースを、必要なときにネットワーク経由で利用する考え方。AWSでは多数のサービスを組み合わせてシステムを作る。","mentalModel":"自前で建物・電気・サーバーを全部持つ代わりに、必要な設備をサービスとして借りる。","keyPoints":["初期投資を抑え、利用量に応じて使えるサービスが多い","物理設備ではなくAPIや管理画面からリソースを操作する","可用性・セキュリティ・コストは自動的に最適になるわけではなく設計が必要"],
+      "compare":"オンプレミスは設備を自分で所有・運用する比重が大きい。クラウドはサービス利用へ責任の一部を移せる。","examTip":"『クラウドだから全部AWSが管理する』は誤り。責任共有モデルとセットで覚える。","sourceUrl":"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/introduction.html"
+    },
+    {
+      "id":"regions-az","title":"リージョンとアベイラビリティゾーン","service":"Global Infrastructure","category":"foundation","level":"入門","summary":"リージョンは地理的なAWS拠点単位、AZはリージョン内の独立したインフラ拠点のまとまり。","mentalModel":"リージョン＝都市圏、AZ＝同じ都市圏にある別々の強い建物群。","keyPoints":["多くのサービスはリージョン単位で選択する","複数AZへ分散すると単一障害点を減らしやすい","リージョン選択では遅延、法令、サービス提供状況、コストなどを見る"],
+      "compare":"Multi-AZは同一リージョン内の耐障害性を高める考え方。Multi-Regionはさらに広域障害や地理要件まで考える。","examTip":"『高可用性』ならまず複数AZを疑う。災害対策や世界展開ではMulti-Regionも候補。","sourceUrl":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"
+    },
+    {
+      "id":"shared-responsibility","title":"責任共有モデル","service":"Security","category":"security","level":"入門","summary":"AWSがクラウドそのもののセキュリティを担い、利用者はクラウド上で使う設定・データ・権限などに責任を持つ。","mentalModel":"賃貸マンションで建物の構造は管理会社、部屋の鍵や入居者の管理は自分、という分担に近い。","keyPoints":["AWSはデータセンター、物理設備、基盤側を保護する","利用者はIAM、データ、OS設定など利用サービスに応じた責任を持つ","マネージドサービスほど利用者が管理する範囲は減るがゼロにはならない"],
+      "compare":"EC2ではゲストOSのパッチ等も利用者責任。より抽象化されたマネージドサービスでは基盤管理をAWSへ多く任せられる。","examTip":"サービスごとに『誰がOS・ランタイム・データ・権限を管理するか』を考える。","sourceUrl":"https://aws.amazon.com/compliance/shared-responsibility-model/"
+    },
+    {
+      "id":"iam","title":"IAM — 認証と認可","service":"IAM","category":"security","level":"必須","summary":"AWS上で、誰が・何に対して・どの操作を許されるかを制御する中心サービス。","mentalModel":"AWS全体の入館証と権限表。","keyPoints":["人間には可能ならフェデレーションと一時的認証情報を使う","AWS上のワークロードにはIAMロールを使い、長期アクセスキーを減らす","最小権限、MFA、rootユーザー保護が基本","明示的DenyはAllowより優先される"],
+      "compare":"IAMユーザーは恒久的な主体として扱えるが、現在のベストプラクティスでは人間のアクセスにフェデレーション、ワークロードにロールを優先する。","examTip":"『EC2からS3へ安全にアクセス』ならアクセスキー直書きよりIAMロール。","sourceUrl":"https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+    },
+    {
+      "id":"ec2","title":"EC2 — 仮想サーバー","service":"Amazon EC2","category":"compute","level":"必須","summary":"仮想マシンを必要な構成で起動できるコンピューティングサービス。OSレベルの自由度が高い。","mentalModel":"クラウド上で借りる自分専用のPC / サーバー。","keyPoints":["インスタンスタイプでCPU・メモリ等を選ぶ","AMIは起動時のOSやソフトウェア構成の元になる","Security Groupでインスタンスへの通信を制御する","停止・終了・再起動は意味が異なる"],
+      "compare":"Lambdaより管理範囲は広いが自由度も高い。コンテナサービスよりOSへ直接触れやすい。","examTip":"OS設定や常駐プロセスなど細かい制御が必要ならEC2が候補。","sourceUrl":"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+    },
+    {
+      "id":"autoscaling-elb","title":"ELBとAuto Scaling","service":"Elastic Load Balancing / EC2 Auto Scaling","category":"compute","level":"必須","summary":"ELBで通信を複数ターゲットへ分散し、Auto Scalingで需要に応じてEC2台数を調整する。","mentalModel":"受付係が客を空いている窓口へ振り分け、混んだら窓口そのものを増やす。","keyPoints":["ロードバランサーは正常なターゲットへトラフィックを振り分ける","Auto Scaling Groupは希望・最小・最大キャパシティを管理できる","複数AZへ配置すると可用性を高めやすい"],
+      "compare":"ELBは通信分散、Auto Scalingは台数調整。役割が違い、組み合わせることが多い。","examTip":"『アクセス増加に自動対応』『単一EC2障害に強くする』なら両者の組み合わせを考える。","sourceUrl":"https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+    },
+    {
+      "id":"s3","title":"S3 — オブジェクトストレージ","service":"Amazon S3","category":"storage","level":"必須","summary":"ファイルのようなデータをオブジェクトとしてバケットに保存する、高耐久なオブジェクトストレージ。","mentalModel":"巨大で丈夫なクラウド倉庫。ファイルサーバーのディスクをそのまま置き換えるものではない。","keyPoints":["データはバケット内のオブジェクトとして扱う","静的Web資産、ログ、バックアップ、データレイクなど用途が広い","ストレージクラスを用途に合わせて選べる","公開設定やバケットポリシーの誤設定に注意"],
+      "compare":"EBSは主にEC2へアタッチするブロックストレージ、EFSは共有ファイルシステム、S3はオブジェクトストレージ。","examTip":"大量オブジェクト、バックアップ、静的コンテンツならS3を強く疑う。","sourceUrl":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+    },
+    {
+      "id":"ebs-efs","title":"EBSとEFS — ディスクと共有ファイル","service":"Amazon EBS / Amazon EFS","category":"storage","level":"必須","summary":"EBSはEC2向けのブロックストレージ、EFSは複数のコンピュートから共有しやすいマネージドファイルシステム。","mentalModel":"EBS＝PCにつなぐディスク、EFS＝ネットワーク上の共有フォルダ。","keyPoints":["EBSはブロックデバイスとしてEC2で利用する代表的ストレージ","EFSはNFSベースの共有ファイルストレージ","同じ『保存』でもアクセス方式と共有要件で選ぶ"],
+      "compare":"S3＝オブジェクト、EBS＝ブロック、EFS＝ファイル。まずこの3分類を崩さない。","examTip":"複数EC2が同じファイル群へ同時アクセスする要件ならEFSを候補にする。","sourceUrl":"https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
+    },
+    {
+      "id":"vpc","title":"VPC — AWS内のネットワーク","service":"Amazon VPC","category":"network","level":"必須","summary":"AWS上に論理的に分離されたネットワークを作り、IP範囲・サブネット・ルーティング・通信制御を設計する。","mentalModel":"AWS内に作る自分専用の街区。サブネットは街区内の区画、ルートテーブルは道路案内。","keyPoints":["CIDRでVPCのIPアドレス範囲を決める","サブネットはAZに属する","Internet GatewayはVPCとインターネット間通信の構成要素","Security GroupとNetwork ACLは作用する場所と性質が異なる"],
+      "compare":"Security Groupはリソース側で使うステートフルな制御、Network ACLはサブネット境界のステートレスな制御。","examTip":"『Public Subnet』は名前では決まらない。インターネットへのルートなど構成全体を見る。","sourceUrl":"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+    },
+    {
+      "id":"route53-cloudfront","title":"Route 53とCloudFront","service":"Amazon Route 53 / Amazon CloudFront","category":"network","level":"重要","summary":"Route 53はDNSなどを提供し、CloudFrontは世界中のエッジロケーションを使ってコンテンツ配信を高速化するCDN。","mentalModel":"Route 53＝住所案内、CloudFront＝利用者の近くに置く配送拠点。","keyPoints":["Route 53はDNSルーティングやヘルスチェック等を提供する","CloudFrontはオリジンのコンテンツをエッジでキャッシュできる","S3やALBなどをCloudFrontのオリジンとして使える"],
+      "compare":"Route 53は『どこへ接続するか』を名前解決・ルーティングで導く。CloudFrontは『どう近くから配るか』を担う。","examTip":"世界中へ静的コンテンツを低遅延配信するならCloudFront。ドメイン名のルーティングならRoute 53。","sourceUrl":"https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+    },
+    {
+      "id":"rds","title":"RDS — リレーショナルDB","service":"Amazon RDS","category":"database","level":"必須","summary":"MySQL、PostgreSQLなどのリレーショナルデータベースをマネージドで利用するサービス。","mentalModel":"SQLデータベースの面倒な基盤運用をAWSへ多く任せる。","keyPoints":["表・関係・SQLが適するデータで有力","バックアップやパッチなど多くの運用をマネージド化できる","Multi-AZは高可用性、Read Replicaは主に読み取りスケールなど目的を区別する"],
+      "compare":"DynamoDBはNoSQLでアクセスパターン中心の設計。複雑なリレーションやSQL中心ならRDS系が自然なことが多い。","examTip":"Multi-AZとRead Replicaを『同じ複製機能』として覚えない。目的から判断する。","sourceUrl":"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+    },
+    {
+      "id":"dynamodb","title":"DynamoDB — サーバーレスNoSQL","service":"Amazon DynamoDB","category":"database","level":"必須","summary":"低レイテンシで大規模にスケールする、フルマネージドなキー・バリュー / ドキュメント型NoSQLデータベース。","mentalModel":"巨大な表を自由にJOINするより、決めたキーで高速に取り出すことを得意とする。","keyPoints":["Partition Keyなどキー設計が非常に重要","サーバー管理を意識せずスケールさせやすい","アクセスパターンを先に考えてテーブル設計する","DynamoDB Streamsなどイベント連携も可能"],
+      "compare":"RDSはリレーションとSQL、DynamoDBはキー中心の高スケールNoSQL。データ量だけで選ばない。","examTip":"予測困難な大規模アクセス、ミリ秒単位の応答、サーバーレス設計では候補になりやすい。","sourceUrl":"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+    },
+    {
+      "id":"lambda-apigw","title":"LambdaとAPI Gateway","service":"AWS Lambda / Amazon API Gateway","category":"serverless","level":"必須","summary":"Lambdaはイベントに応じてコードを実行するサーバーレスコンピューティング、API GatewayはAPIの公開・管理を担う。","mentalModel":"API Gateway＝受付、Lambda＝呼ばれたときだけ働く処理担当。","keyPoints":["Lambdaではサーバーの常時管理を減らせる","イベント駆動処理と相性が良い","API Gatewayと組み合わせてHTTP APIのバックエンドを構築できる","実行時間・実行環境などサービス固有の制約を前提に設計する"],
+      "compare":"常時稼働やOS制御が必要ならEC2等、短時間のイベント駆動処理ならLambdaが適することが多い。","examTip":"『アクセスがないときのサーバー管理を減らしたい』『イベントで処理したい』ならLambdaを検討。","sourceUrl":"https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+    },
+    {
+      "id":"sqs-sns-eventbridge","title":"SQS / SNS / EventBridge","service":"Amazon SQS / Amazon SNS / Amazon EventBridge","category":"serverless","level":"重要","summary":"システム同士を直接結びつけすぎず、メッセージやイベントで連携するための代表サービス。","mentalModel":"SQS＝順番待ち箱、SNS＝一斉通知、EventBridge＝イベントの仕分け・配送ルール。","keyPoints":["SQSはメッセージをキューに貯め、受信側が取得して処理する","SNSはPublish/Subscribe型で複数購読先へ通知を配信できる","EventBridgeはイベントをルールでマッチさせターゲットへ送れる","疎結合にすると一時障害やスケール差を吸収しやすい"],
+      "compare":"『あとで1件ずつ処理』はSQS、『複数へ通知』はSNS、『イベント条件で振り分け』はEventBridgeという入口で整理する。","examTip":"送信側が受信側の処理完了を待たなくてよい設計ではメッセージングを考える。","sourceUrl":"https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+    },
+    {
+      "id":"cloudwatch","title":"CloudWatch — メトリクス・ログ・アラーム","service":"Amazon CloudWatch","category":"operations","level":"必須","summary":"AWSリソースやアプリケーションの状態を観測するためのメトリクス、ログ、アラームなどを扱う監視サービス群。","mentalModel":"システムの健康診断モニター。今どう動いているかを見る。","keyPoints":["メトリクスで数値的な状態を観測する","CloudWatch Logsでログを集約・検索できる","Alarmで条件を監視し通知やアクションにつなげられる","監視対象の状態把握と操作履歴監査は別物"],
+      "compare":"CloudWatch＝状態や性能の監視、CloudTrail＝AWS API操作の監査記録、とまず区別する。","examTip":"CPU使用率やログ、アラームはCloudWatch。『誰がAWS APIを実行したか』はCloudTrail。","sourceUrl":"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html"
+    },
+    {
+      "id":"cloudtrail-config","title":"CloudTrailとAWS Config","service":"AWS CloudTrail / AWS Config","category":"operations","level":"重要","summary":"CloudTrailはAWS API等のアクティビティ記録、AWS Configはリソース設定とその変化・準拠状態の把握に使う。","mentalModel":"CloudTrail＝操作の防犯カメラ、Config＝設備設定の履歴台帳。","keyPoints":["CloudTrailはアカウント内のアクティビティ調査に重要","AWS Configはリソース構成の変化やルールへの準拠評価に使える","CloudWatchとは目的が異なるが運用では組み合わせる"],
+      "compare":"CloudWatchは稼働状態、CloudTrailは操作履歴、Configは構成状態・変更履歴。","examTip":"監査問題では『何を知りたいのか』を分解すると3サービスを選びやすい。","sourceUrl":"https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+    },
+    {
+      "id":"cost","title":"料金とコスト最適化","service":"AWS Billing / Cost Management","category":"operations","level":"重要","summary":"AWSは従量課金が多いため、使っていないリソースの停止・削除、購入オプション、可視化、予算アラートなどを組み合わせて管理する。","mentalModel":"電気代と同じで、単価だけでなく『何をどれだけ使ったか』を継続して見る。","keyPoints":["AWS Pricing Calculatorは導入前の見積もりに使える","AWS Budgetsは予算や利用量のしきい値監視に使える","Cost Explorerはコストと利用状況の分析に使える","料金体系・無料枠・割引は変わり得るので最新公式情報を確認する"],
+      "compare":"見積もり＝Pricing Calculator、実績分析＝Cost Explorer、予算監視＝Budgetsという役割で整理する。","examTip":"コスト問題は『予測』『可視化』『通知』『長期利用割引』『不要資源削減』のどれかを判定する。","sourceUrl":"https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html"
+    },
+    {
+      "id":"wellarchitected","title":"Well-Architected Framework","service":"AWS Well-Architected","category":"architecture","level":"重要","summary":"AWS上のワークロードを、6本の柱から継続的に評価・改善するための設計フレームワーク。","mentalModel":"構成図を作って終わりではなく、6つの観点で健康診断を続ける。","keyPoints":["運用上の優秀性","セキュリティ","信頼性","パフォーマンス効率","コスト最適化","持続可能性"],
+      "compare":"特定サービスの使い方ではなく、設計判断を評価するための上位フレームワーク。","examTip":"1つの正解構成を暗記するより、要件に対してどんなトレードオフがあるか考える。","sourceUrl":"https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
+    }
+  ],
+  "quiz": [
+    {"id":"q01","topicId":"regions-az","question":"単一データセンター相当の障害に強くしたい。まず考えるべき設計は？","choices":["同じEC2を1台だけ大型化する","複数AZへ分散する","IAMユーザーを増やす","S3のバケット名を変える"],"answer":1,"explanation":"高可用性の基本は単一障害点を減らすこと。複数AZへの分散が代表的。"},
+    {"id":"q02","topicId":"iam","question":"EC2上のアプリからS3へアクセスさせたい。認証情報の扱いとして優先したいものは？","choices":["アクセスキーをソースコードへ書く","rootユーザーのキーを使う","EC2へIAMロールを関連付ける","全員にAdministratorAccessを付ける"],"answer":2,"explanation":"ワークロードには一時的認証情報を利用できるIAMロールを優先し、長期キー直書きを避ける。"},
+    {"id":"q03","topicId":"shared-responsibility","question":"EC2を利用しているとき、一般に利用者側の責任に含まれるものは？","choices":["AWSデータセンター建物の警備","基盤ハードウェアの交換","ゲストOSやアプリの適切な設定","AWSグローバルネットワーク設備の保守"],"answer":2,"explanation":"EC2ではゲストOSやアプリ、IAM、データなど利用者側の管理範囲が比較的広い。"},
+    {"id":"q04","topicId":"ec2","question":"OSレベルまで細かく制御したい長時間稼働ワークロードで、まず候補になりやすいのは？","choices":["Amazon EC2","Amazon Route 53","AWS Budgets","AWS CloudTrail"],"answer":0,"explanation":"EC2は仮想マシンとしてOSレベルの自由度が高い。"},
+    {"id":"q05","topicId":"autoscaling-elb","question":"アクセス増加に合わせてEC2台数を自動調整したい。主役となる機能は？","choices":["Route 53","EC2 Auto Scaling","CloudTrail","S3 Glacier"],"answer":1,"explanation":"Auto Scaling Groupで需要や条件に応じてインスタンス数を調整できる。"},
+    {"id":"q06","topicId":"s3","question":"画像・バックアップ・ログなど大量のオブジェクト保存に最も自然な候補は？","choices":["Amazon S3","Amazon Route 53","AWS IAM","Amazon SNS"],"answer":0,"explanation":"S3は代表的なオブジェクトストレージ。"},
+    {"id":"q07","topicId":"ebs-efs","question":"複数EC2から同じ共有ファイルシステムへアクセスしたい。まず候補にするのは？","choices":["EFS","IAM","CloudTrail","Route 53"],"answer":0,"explanation":"EFSは共有ファイルストレージ用途に適する。"},
+    {"id":"q08","topicId":"vpc","question":"VPC内でサブネットごとの境界に作用するステートレスな通信制御は？","choices":["IAM Role","Security Group","Network ACL","CloudFront"],"answer":2,"explanation":"Network ACLはサブネット境界で動作するステートレスな制御。Security Groupはステートフル。"},
+    {"id":"q09","topicId":"route53-cloudfront","question":"世界中の利用者へ静的コンテンツを低遅延で配信したい。最も直接的なサービスは？","choices":["CloudFront","CloudTrail","AWS Config","IAM"],"answer":0,"explanation":"CloudFrontはエッジロケーションを使うCDN。"},
+    {"id":"q10","topicId":"rds","question":"RDSのMulti-AZ構成を選ぶ主目的として最も適切なのは？","choices":["読み取り処理だけを大量に分散する","高可用性を高める","DNS名を管理する","オブジェクトを保存する"],"answer":1,"explanation":"Multi-AZは主に高可用性・フェイルオーバーのために使う。Read Replicaとは目的を区別する。"},
+    {"id":"q11","topicId":"dynamodb","question":"DynamoDBの設計で特に重要な考え方は？","choices":["アクセスパターンとキー設計","必ず複雑なJOINを使う","OSパッチの手動適用","AZを1つに固定する"],"answer":0,"explanation":"DynamoDBはキーとアクセスパターンを中心に設計する。"},
+    {"id":"q12","topicId":"lambda-apigw","question":"HTTPリクエストを受けて短時間の処理を実行するサーバーレスAPI構成として自然なのは？","choices":["API Gateway + Lambda","CloudTrail + Budgets","Route 53 + IAM User","EBS + Network ACL"],"answer":0,"explanation":"API GatewayでAPIを公開し、Lambdaをバックエンド処理に使う代表構成。"},
+    {"id":"q13","topicId":"sqs-sns-eventbridge","question":"処理要求を一度ためて、受信側が自分のペースで1件ずつ処理したい。最も自然なのは？","choices":["SQS","Route 53","EBS","IAM"],"answer":0,"explanation":"SQSはキューで送信側と受信側を疎結合にしやすい。"},
+    {"id":"q14","topicId":"cloudwatch","question":"EC2のCPU使用率を監視し、しきい値超過でアラームを出したい。何を使う？","choices":["CloudWatch","CloudTrail","Route 53","IAM Access Analyzer"],"answer":0,"explanation":"メトリクス監視とアラームはCloudWatchの代表用途。"},
+    {"id":"q15","topicId":"cloudtrail-config","question":"『誰がAWS APIを実行したか』を追跡したい。最も直接的なのは？","choices":["CloudTrail","CloudFront","EFS","Auto Scaling"],"answer":0,"explanation":"CloudTrailはAWSアカウントのアクティビティやAPI操作の追跡に使う。"},
+    {"id":"q16","topicId":"cost","question":"AWS利用前に構成の料金を概算したい。最も直接的なツールは？","choices":["AWS Pricing Calculator","CloudTrail","Network ACL","EC2 Auto Scaling"],"answer":0,"explanation":"Pricing Calculatorは導入前の見積もりに使う。"},
+    {"id":"q17","topicId":"wellarchitected","question":"Well-Architected Frameworkに含まれないものは？","choices":["信頼性","コスト最適化","持続可能性","売上最大化"],"answer":3,"explanation":"6本柱は運用上の優秀性、セキュリティ、信頼性、パフォーマンス効率、コスト最適化、持続可能性。"},
+    {"id":"q18","topicId":"cloud-basics","question":"クラウド利用について正しい考え方は？","choices":["クラウドなら設計しなくても自動的に高可用になる","利用者側のセキュリティ責任は一切ない","サービスを組み合わせ、要件に合わせて可用性・安全性・コストを設計する","すべてのサービスは必ず無料で使える"],"answer":2,"explanation":"クラウドは強力な部品を提供するが、要件に合う設計と運用は必要。"}
+  ]
+}
