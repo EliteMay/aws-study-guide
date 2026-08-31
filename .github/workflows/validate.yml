@@ -1,0 +1,32 @@
+name: Validate AWS Study Guide
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    uses: EliteMay/.github/.github/workflows/reusable-web-baseline.yml@89d184f743192f7203d39bfca67bcb632f770893
+    with:
+      node-version: '22'
+      syntax-paths: 'js tests'
+      check-json: true
+
+  project-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate dataset and local references
+        run: node tests/validate.mjs
