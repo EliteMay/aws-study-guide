@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "2026.09.01-1",
+  "updatedAt": "2026-09-01",
+  "files": [
+    "./data/aws-core.json"
+  ],
+  "counts": {
+    "topics": 18,
+    "quizQuestions": 18
+  }
+}
