@@ -33,11 +33,15 @@ AWS公式ドキュメントを優先し、特に以下を確認して初期教�
 ### Validation status
 
 - Implemented: Yes
-- Static Validation: GitHub Actions追加後に最終Commitで確認予定
+- Static Validation: **Passed** on commit `65403655a557bb5b92a56e04d21b3766144707b8`
 - Browser Validated: Unverified
 - Visual Reviewed: Code-level baseline only / 実ブラウザ未確認
-- GitHub Pages Published: Unverified
+- GitHub Pages Published: **Unverified / repository Pages is not enabled yet**
 - User Validated: Unverified
+
+Static ValidationではReusable Web BaselineとProject validatorの両方が成功した。
+
+GitHub Pages Actions deploymentも試行したが、Repository側でPagesが未有効のため `Configure Pages` がNot Foundで失敗した。コード不具合ではないため失敗Workflowは削除し、静的サイトに適した `main` / root のbranch publishingをREADMEへ記載した。
 
 ### Known limitations
 
@@ -45,6 +49,7 @@ AWS公式ドキュメントを優先し、特に以下を確認して初期教�
 - Topic数は初期18件。AWS全サービスを網羅するものではない。
 - URLごとのDeep Link Routerは未実装。
 - 実ブラウザでのVisual / Interaction確認は未実施。
+- GitHub PagesはSettingsで初回有効化が必要。
 
 ### Next candidates
 
