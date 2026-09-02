@@ -1,162 +1,70 @@
 # Specification
 
-## Architecture
+## Purpose
 
-GitHub Pages向けの静的Webアプリ。
+AWSを知らない利用者が、このサイトを上から進めるだけで一般IT基礎とAWSの基本構造、主要サービスの使い分けを理解できる状態を目指す。
 
-```text
-index.html
-  ├─ css/styles.css
-  ├─ js/app.js
-  └─ fetch → data/manifest.json → data/aws-core.json
-```
+## Primary workflow
 
-外部Backend / Build step / FrameworkはMVPでは使用しない。
+1. Homeで次Lessonを確認
+2. Lesson本文を読む
+3. 短い確認問題に答える
+4. 理解度を自己評価する
+5. 次Lessonへ進む
+6. Map / Compareで位置関係と差を確認する
+7. Practiceで要件からサービスを選ぶ
+8. 誤答・低理解度をReviewする
 
-## Data Schema
+## Information architecture
 
-### manifest.json
+- Home: 今日の学習、進捗、コースの考え方
+- Course: 10章 / 24Lesson
+- Lesson Reader: 本文、例え、図式、要点、関連、確認問題、理解度
+- Architecture Map: サービスの位置関係
+- Compare: 類似サービスの選択条件
+- Practice: 要件から構成を選ぶ練習
+- Review: 誤答 / 低理解度を自動収集
+- Glossary: 基礎用語検索
 
-```json
-{
-  "schemaVersion": 1,
-  "datasetVersion": "YYYY.MM.DD-N",
-  "updatedAt": "YYYY-MM-DD",
-  "files": [],
-  "counts": {
-    "topics": 0,
-    "quizQuestions": 0
-  }
-}
-```
+## Data
 
-### Topic
+`data/course-core.json` と `data/lessons-*.json` が教材Source of Truth。
 
-必須フィールド:
+Lessonは `id`, `chapter`, `title`, `minutes`, `lead`, `analogy`, `flow`, `points`, `connect`, `terms`, `check`, `source`, `legacyTopicId` を持つ。
 
-- id
-- title
-- service
-- category
-- level
-- summary
-- mentalModel
-- keyPoints[]
-- compare
-- examTip
-- sourceUrl
+`data/manifest.json` はDataset Versionと件数を持ち、CIでcourse.jsonと一致を確認する。
 
-### Quiz
+## Persistence
 
-- id
-- topicId
-- question
-- choices[]
-- answer: 0始まりのindex
-- explanation
+Storage key: `awsStudyGuide.progress.v1`
 
-## Progress Schema
+新しい状態:
+- `lessonDone`
+- `lessonChecks`
+- `confidence`
+- `scenarioHistory`
 
-保存キー: `awsStudyGuide.progress.v1`
+旧状態:
+- `completed`
+- `weak`
+- `bookmarks`
+- `quizHistory`
 
-```json
-{
-  "schemaVersion": 1,
-  "completed": [],
-  "weak": [],
-  "bookmarks": [],
-  "quizHistory": {},
-  "updatedAt": null
-}
-```
+旧状態を消さず互換情報として保持する。`legacyTopicId` が一致した旧完了Topicは新Lessonへ移行する。
 
-`quizHistory[questionId]`:
+## Review rule
 
-```json
-{
-  "attempts": 1,
-  "correct": 1,
-  "lastAt": "ISO-8601"
-}
-```
+Review Queueへ入る条件:
 
-## Navigation
+- Lesson確認問題の最新結果が不正解
+- 自己理解度が `1 / まだ曖昧`
 
-SPAライクに同一HTML内のViewを切り替える。
+## Visual direction
 
-- `dashboard`
-- `roadmap`
-- `topics`
-- `quiz`
-- `review`
+AWSらしい濃紺 / オレンジのIdentityと左Railは維持する。中央は白〜薄灰のReading Surfaceにし、管理Dashboardではなく教材を読む感覚を優先する。
 
-URL RouterはMVPでは採用しないため、GitHub Pages上のDirect Link問題を増やさない。
+Desktopでは固定Rail + Reading Workspace。Lessonでは中央本文をPrimary Surfaceとし、左にChapter内Lesson、右にConnection / Termsを置く。MobileではRailをDrawer化し、Lesson本文を最優先する。
 
-## Search
+## Failure state
 
-`topics` の以下を小文字化した文字列へ部分一致する。
-
-- title
-- service
-- summary
-- mentalModel
-- compare
-- examTip
-- keyPoints
-
-検索入力時は自動的にサービス学習Viewへ移動する。
-
-## Topic Detail
-
-`<dialog>` を使用する。
-
-操作:
-
-- 学習済み ON / OFF
-- 苦手 ON / OFF
-- ブックマーク ON / OFF
-- AWS公式Sourceを新規タブで開く
-
-## Quiz
-
-- Dataset順に1問ずつ表示
-- 回答後に正解・不正解と解説を表示
-- 回答後だけ次へ進める
-- 全問終了後はSession scoreを通知して先頭へ戻る
-- 累積履歴はlocalStorageへ保存
-
-## Failure State
-
-教材JSON読込失敗時:
-
-- ConsoleへError
-- Topbarへ「教材の読み込みに失敗」
-- Main画面へFailure message
-- 保存済み進捗は削除しない
-
-localStorage書込失敗時:
-
-- ConsoleへError
-- Toastで保存失敗を通知
-- その操作を成功扱いしない
-
-## Accessibility
-
-- `<button>` / `<nav>` / `<main>` / `<dialog>` 等の意味要素を利用
-- focus-visibleを削除しない
-- Skip linkを用意
-- 色だけで主要状態を説明しない
-- `prefers-reduced-motion` を考慮
-
-## Responsive
-
-- Desktop: 固定Sidebar + Content
-- Tablet以下: SidebarをDrawer化
-- 580px以下: Topic 1列、Architecture flow縦化
-- 主要操作をViewport外へ固定しない
-
-## Content Policy
-
-AWS仕様は変化するため、更新時はAWS公式ドキュメントを優先する。
-
-変化しやすい値（料金、Quota、無料枠、具体的Version等）は教材本文へ不用意に固定しない。
+`data/course.json` のFetch失敗時はConsoleへErrorを出し、Rail statusとToastで教材読込失敗を通知する。保存済み進捗は削除しない。

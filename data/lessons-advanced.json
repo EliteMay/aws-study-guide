@@ -1,0 +1,234 @@
+{
+  "lessons": [
+    {
+      "id": "aws-lambda",
+      "chapter": "serverless",
+      "title": "LambdaとAPI Gateway",
+      "minutes": 9,
+      "lead": "サーバーを常時管理せず、イベントやAPI呼び出しに応じてコードを実行します。",
+      "analogy": "必要なときだけ呼ばれる作業員。受付窓口がAPI Gateway。",
+      "flow": [
+        "Client",
+        "API Gateway",
+        "Lambda",
+        "Other services"
+      ],
+      "points": [
+        "Lambdaはイベント駆動でコードを実行",
+        "API GatewayはHTTP APIなどの入口を提供",
+        "サーバー管理を減らせるが実行時間や設計特性を理解して使う"
+      ],
+      "connect": "小規模API、イベント処理、S3アップロード後処理などでよく登場します。",
+      "terms": [
+        "Lambda",
+        "API Gateway",
+        "Serverless",
+        "Event"
+      ],
+      "check": {
+        "question": "HTTP APIの入口と処理をサーバーレスで作りたい。組み合わせは？",
+        "choices": [
+          "API Gateway + Lambda",
+          "Route 53 + EBS",
+          "IAM + CloudTrail"
+        ],
+        "answer": 0,
+        "explain": "API Gatewayを入口、Lambdaを処理にする代表構成があります。"
+      },
+      "source": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "legacyTopicId": "lambda-apigw"
+    },
+    {
+      "id": "aws-messaging",
+      "chapter": "serverless",
+      "title": "SQS / SNS / EventBridge",
+      "minutes": 10,
+      "lead": "処理同士を直接強く結びつけず、メッセージやイベントで連携します。",
+      "analogy": "SQS＝待ち行列、SNS＝一斉通知、EventBridge＝イベント振り分け。",
+      "flow": [
+        "Producer",
+        "Queue / Topic / Bus",
+        "Consumers"
+      ],
+      "points": [
+        "SQSはキューで処理をためる",
+        "SNSはPub/Subで複数購読先へ通知",
+        "EventBridgeはイベントをルールで振り分ける",
+        "目的により組み合わせる"
+      ],
+      "connect": "障害時の耐性やスケールを高める『疎結合』設計で重要です。",
+      "terms": [
+        "SQS",
+        "SNS",
+        "EventBridge",
+        "疎結合"
+      ],
+      "check": {
+        "question": "処理依頼を一旦ため、受信側が自分のペースで処理したい。候補は？",
+        "choices": [
+          "SQS",
+          "Route 53",
+          "CloudFront"
+        ],
+        "answer": 0,
+        "explain": "キューとしてバッファするSQSが適しています。"
+      },
+      "source": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "legacyTopicId": "sqs-sns-eventbridge"
+    },
+    {
+      "id": "aws-cloudwatch",
+      "chapter": "ops",
+      "title": "CloudWatch — 状態を監視する",
+      "minutes": 8,
+      "lead": "メトリクス、ログ、アラームなどを使ってシステムの状態を観測します。",
+      "analogy": "車のメーターと警告灯。今どう動いているかを見る。",
+      "flow": [
+        "Resources",
+        "Metrics / Logs",
+        "CloudWatch",
+        "Alarm"
+      ],
+      "points": [
+        "メトリクスを監視",
+        "ログを集約・検索",
+        "条件に応じてアラームを出す",
+        "CloudTrailとは目的が違う"
+      ],
+      "connect": "CPU負荷、アプリログ、エラー率など『状態・性能』を見る中心です。",
+      "terms": [
+        "CloudWatch",
+        "Metrics",
+        "Logs",
+        "Alarm"
+      ],
+      "check": {
+        "question": "EC2のCPU使用率が高いとき通知したい。候補は？",
+        "choices": [
+          "CloudWatch",
+          "CloudTrail",
+          "Route 53"
+        ],
+        "answer": 0,
+        "explain": "メトリクス監視とアラームはCloudWatchの代表用途です。"
+      },
+      "source": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html",
+      "legacyTopicId": "cloudwatch"
+    },
+    {
+      "id": "aws-cloudtrail",
+      "chapter": "ops",
+      "title": "CloudTrail — 操作を監査する",
+      "minutes": 7,
+      "lead": "AWSアカウント内で誰が何を操作したかを追跡するためのイベント履歴を扱います。",
+      "analogy": "防犯カメラの操作記録。誰がいつ何をしたか。",
+      "flow": [
+        "User / Role",
+        "API call",
+        "CloudTrail",
+        "Event history"
+      ],
+      "points": [
+        "APIアクティビティを記録",
+        "監査やトラブル調査に使う",
+        "CloudWatchは状態監視、CloudTrailは操作履歴という軸で区別"
+      ],
+      "connect": "『誰がSecurity Groupを変更した？』のような調査に使います。",
+      "terms": [
+        "CloudTrail",
+        "監査",
+        "API activity"
+      ],
+      "check": {
+        "question": "誰がIAMポリシーを変更したか調べたい。候補は？",
+        "choices": [
+          "CloudTrail",
+          "CloudFront",
+          "EBS"
+        ],
+        "answer": 0,
+        "explain": "API操作履歴の監査にはCloudTrailが代表です。"
+      },
+      "source": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+      "legacyTopicId": "cloudtrail-config"
+    },
+    {
+      "id": "aws-cost",
+      "chapter": "ops",
+      "title": "料金の考え方とコスト管理",
+      "minutes": 7,
+      "lead": "クラウドでは『作ったまま』が課金につながるため、料金構造と可視化を早めに理解します。",
+      "analogy": "電気代のメーター。使った量と契約内容で請求が変わる。",
+      "flow": [
+        "Resources",
+        "Usage",
+        "Pricing",
+        "Cost Explorer / Budgets"
+      ],
+      "points": [
+        "サービスごとに料金単位が違う",
+        "停止しても一部リソースで料金が残る場合がある",
+        "Cost ExplorerやBudgets等で可視化・通知する",
+        "ハンズオン後は不要リソースを削除する習慣を持つ"
+      ],
+      "connect": "実際にAWSを触る前に『作成→確認→削除』までを1セットにします。",
+      "terms": [
+        "Cost Explorer",
+        "Budgets",
+        "Free Tier"
+      ],
+      "check": {
+        "question": "学習用リソースを作った後に最も大切な習慣は？",
+        "choices": [
+          "放置する",
+          "不要なリソースを確認し削除する",
+          "rootで常用する"
+        ],
+        "answer": 1,
+        "explain": "学習後に不要リソースを残さないことが予期せぬ料金を避ける基本です。"
+      },
+      "source": "https://aws.amazon.com/aws-cost-management/",
+      "legacyTopicId": "cost"
+    },
+    {
+      "id": "aws-waf",
+      "chapter": "architecture",
+      "title": "Well-Architected — 良い構成を評価する",
+      "minutes": 10,
+      "lead": "『動くか』だけでなく、運用・安全性・信頼性・性能・コスト・持続可能性の6観点で設計を見ます。",
+      "analogy": "建物を完成後に、耐震・防火・使いやすさ・維持費など複数観点で点検する。",
+      "flow": [
+        "Operational Excellence",
+        "Security",
+        "Reliability",
+        "Performance Efficiency",
+        "Cost Optimization",
+        "Sustainability"
+      ],
+      "points": [
+        "6本柱でトレードオフを考える",
+        "絶対の正解ではなく要件とのバランスを見る",
+        "構成レビューの共通言語になる"
+      ],
+      "connect": "ここまで学んだEC2/S3/RDS/VPC/IAMなどを『なぜこの構成なのか』で振り返ります。",
+      "terms": [
+        "Well-Architected",
+        "6 pillars",
+        "Reliability"
+      ],
+      "check": {
+        "question": "Well-Architected Frameworkの柱はいくつ？",
+        "choices": [
+          "3",
+          "4",
+          "6",
+          "10"
+        ],
+        "answer": 2,
+        "explain": "現在のWell-Architected Frameworkは6本柱です。"
+      },
+      "source": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html",
+      "legacyTopicId": "wellarchitected"
+    }
+  ]
+}

@@ -2,73 +2,85 @@
 
 ## 目的
 
-AWS初心者が、サービス名の丸暗記ではなく「要件 → サービス選択 → 理由 → 構成」の流れで理解できる個人向け学習サイトを作る。
+AWSを一度も学んだことがない利用者が、このサイトを上から順番に進めるだけで、一般IT基礎からAWS主要サービスの役割・使い分け・基本構成まで理解できる個人向け学習サイトにする。
 
 ## 利用者
 
-- 主利用者: 自分
+- 主利用者: AWS完全初心者の自分
 - 公開形態: GitHub Pagesで閲覧可能な公開サイト
 
 ## Project Profile
 
-`STATIC + DATA + TOOL`
+`STATIC + DATA + TOOL + PUBLIC-CONTENT`
 
-## MVP
+## 必須学習体験
 
-1. AWS基礎ロードマップを表示できる
-2. サービス教材をカテゴリ・検索で探せる
-3. 各教材で役割・イメージ・比較・判断ポイントを読める
-4. 学習済み / 苦手 / ブックマークを保存できる
-5. クイズへ回答し、即時解説を確認できる
-6. 復習画面で苦手 / ブックマークを再確認できる
-7. GitHub Pagesのサブパスで動作する
+1. Web / サーバー / DNS / DB / APIなどAWS以前の基礎から開始できる
+2. 推奨順のChapter / Lessonを迷わず進められる
+3. 各Lessonで「例え → 流れ → 要点 → AWS内でのつながり」を理解できる
+4. 各Lessonの短い確認問題で読んだだけを防ぐ
+5. Lesson完了と理解度を別々に保存できる
+6. 構成マップでAWSサービスの位置関係を確認できる
+7. 類似サービスを比較して選択条件を整理できる
+8. 要件からサービスを選ぶ構成問題を解ける
+9. 誤答・低理解度を自動で復習キューへ入れる
+10. 用語で詰まったとき辞書へすぐ戻れる
+11. ホームで「次にやるLesson」をすぐ開始できる
 
 ## 画面構成
 
-- ホーム: 進捗、次の学習、重要比較
-- ロードマップ: 推奨学習順
-- サービス学習: 全教材、検索、カテゴリ絞り込み
-- クイズ: 選択問題、即時解説、正答履歴
-- 復習: 苦手 / ブックマーク
-- 教材詳細: Dialogで要点を表示
+- Home: 今日のLesson、進捗、学習方法、Chapter概要
+- Course: 10章 / 24Lessonの推奨順
+- Lesson Reader: 本文、例え、概念フロー、要点、関連、確認問題、理解度
+- Architecture Map: 典型的なWeb構成上でサービス位置を確認
+- Compare: 類似サービスのDecision Table
+- Practice: 要件ベースの構成問題
+- Review: 誤答 / 低理解度の自動復習
+- Glossary: 基礎用語検索
 
-## データ構成
+## データ
 
 公開教材:
 
-- `data/manifest.json`: Dataset Version / 件数 / 読み込み対象
-- `data/aws-core.json`: category / roadmap / topics / quiz
+- `data/manifest.json`: Version / 件数 / 読み込み対象
+- `data/course-core.json`: version / chapters / comparisons / scenarios / glossary
+- `data/lessons-foundation.json`: IT基礎 / Cloud / IAM
+- `data/lessons-core-services.json`: Compute / Storage / Network / Database
+- `data/lessons-advanced.json`: Serverless / Operations / Architecture
 
 ユーザー状態:
 
-- `localStorage` の `awsStudyGuide.progress.v1`
-- `schemaVersion: 1`
-- completed / weak / bookmarks / quizHistory
+- `localStorage`: `awsStudyGuide.progress.v1`
+- 旧 completed / weak / bookmarks / quizHistoryを削除せず保持
+- 新 lessonDone / lessonChecks / confidence / scenarioHistoryを追加
+- `legacyTopicId`で旧Topic完了を新Lessonへ可能な範囲で移行
 
 ## 崩してはいけない仕様
 
-- AWS教材データをHTML/JSへ大量直書きしない
-- GitHub Pagesのリポジトリサブパスを壊すroot固定パスを使わない
-- 既存進捗をSchema変更時に無断破棄しない
+- AWS教材本文をHTML / JSへ大量直書きしない
+- GitHub PagesのRepository subpathを壊すroot固定パスを使わない
+- 旧 `awsStudyGuide.progress.v1` を無断破棄しない
 - AWS APIキー等の秘密情報を公開ファイルへ置かない
-- 料金・上限・推奨事項など変化しやすい情報を無根拠に固定しない
-- 未実装機能を完成済みとしてUIへ置かない
+- 料金・Quota等、変化しやすい数値を無根拠に固定しない
+- 未実装機能を完成済みとして見せない
+- 初心者に未説明の専門用語を大量に先出ししない
 
 ## 非機能要件
 
 - Firefox / Chromium系を主対象とする
 - 320px幅で致命的な横スクロールを発生させない
-- キーボードfocus-visibleを維持する
-- 外部CDN・Frameworkなしで動作する
+- focus-visibleを維持する
+- `prefers-reduced-motion` を考慮する
+- 外部Framework / CDNなしで動作する
 - 教材読込失敗を画面上で把握できる
 
 ## 完成条件
 
-- 必須ファイルが存在する
-- JS / JSONのStatic Validationが成功する
-- Manifest件数とデータ件数が一致する
-- Topic / Quiz ID参照が壊れていない
-- 主要ボタンと検索・保存・クイズが通常利用できる
+- 10章 / 24LessonがJSONから読み込める
+- Lesson確認問題・理解度・完了状態が保存できる
+- Map / Compare / Practice / Review / Glossaryが通常利用できる
+- JS / JSON / local referenceのStatic Validationが通る
+- Manifest件数と教材件数が一致する
 - README / SPEC / WORK_REPORTが現行実装と一致する
-- GitHub Pages実公開確認、または未確認状態が明記されている
-- Visual Quality Baseline上のBlockingな崩れがない
+- GitHub Pages公開状態を確認、または未確認事項を明記する
+- Visual Quality Baseline上のBlockingな崩れを残さない

@@ -1,0 +1,348 @@
+{
+  "lessons": [
+    {
+      "id": "aws-ec2",
+      "chapter": "compute",
+      "title": "EC2 — 仮想サーバー",
+      "minutes": 10,
+      "lead": "OSレベルまで自分で扱えるクラウド上の仮想サーバーです。",
+      "analogy": "クラウド上で借りる自分用PC/サーバー。",
+      "flow": [
+        "AMI",
+        "EC2 instance",
+        "Security Group",
+        "EBS"
+      ],
+      "points": [
+        "インスタンスタイプでCPU/メモリ特性を選ぶ",
+        "AMIは起動元イメージ",
+        "Security Groupで通信を制御",
+        "自由度が高い分、OS管理など利用者責任も大きい"
+      ],
+      "connect": "Webアプリ、バッチ、常駐プロセスなど幅広く使えます。Lambdaとの違いは『サーバーを管理するか』が大きいです。",
+      "terms": [
+        "EC2",
+        "AMI",
+        "インスタンスタイプ",
+        "Security Group"
+      ],
+      "check": {
+        "question": "OSへ直接ログインして細かく設定したい。候補は？",
+        "choices": [
+          "EC2",
+          "Route 53",
+          "S3",
+          "CloudFront"
+        ],
+        "answer": 0,
+        "explain": "OSレベルの自由度が必要ならEC2が代表候補です。"
+      },
+      "source": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html",
+      "legacyTopicId": "ec2"
+    },
+    {
+      "id": "aws-elb",
+      "chapter": "compute",
+      "title": "ELBとAuto Scaling",
+      "minutes": 8,
+      "lead": "アクセスを複数の処理先へ分散し、必要なら処理台数自体を増減します。",
+      "analogy": "受付係が客を空いている窓口へ振り分け、混んだら窓口を増やす。",
+      "flow": [
+        "Users",
+        "Load Balancer",
+        "EC2-A",
+        "EC2-B",
+        "Auto Scaling"
+      ],
+      "points": [
+        "ELBはトラフィックを複数ターゲットへ分散",
+        "Auto ScalingはEC2台数を調整",
+        "複数AZと組み合わせて可用性を高めやすい"
+      ],
+      "connect": "アクセス増加と単一EC2障害の両方へ備える代表的な組み合わせです。",
+      "terms": [
+        "ELB",
+        "ALB",
+        "Auto Scaling"
+      ],
+      "check": {
+        "question": "アクセス急増時にEC2台数を自動調整するのは？",
+        "choices": [
+          "Auto Scaling",
+          "Route 53",
+          "CloudTrail"
+        ],
+        "answer": 0,
+        "explain": "Auto Scaling Groupで必要台数を自動的に調整できます。"
+      },
+      "source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+      "legacyTopicId": "autoscaling-elb"
+    },
+    {
+      "id": "aws-s3",
+      "chapter": "storage",
+      "title": "S3 — オブジェクトストレージ",
+      "minutes": 9,
+      "lead": "画像、静的ファイル、ログ、バックアップなどをオブジェクトとして保存します。",
+      "analogy": "巨大で丈夫なクラウド倉庫。ただし普通のPCディスクと同じではない。",
+      "flow": [
+        "Bucket",
+        "Object key",
+        "Object data",
+        "Metadata"
+      ],
+      "points": [
+        "バケット内にオブジェクトを保存",
+        "静的コンテンツ・ログ・バックアップ等で広く使う",
+        "公開設定や権限設定に注意",
+        "用途に応じたストレージクラスがある"
+      ],
+      "connect": "CloudFrontのオリジン、バックアップ先、データレイクなど多くの構成で登場します。",
+      "terms": [
+        "S3",
+        "バケット",
+        "オブジェクト"
+      ],
+      "check": {
+        "question": "大量の画像ファイルをアプリサーバーから分離して保存したい。候補は？",
+        "choices": [
+          "S3",
+          "Route 53",
+          "IAM",
+          "ELB"
+        ],
+        "answer": 0,
+        "explain": "画像などのオブジェクト保存にはS3が代表的です。"
+      },
+      "source": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+      "legacyTopicId": "s3"
+    },
+    {
+      "id": "aws-block-file",
+      "chapter": "storage",
+      "title": "EBSとEFS — ディスクと共有ファイル",
+      "minutes": 9,
+      "lead": "同じ『保存』でも、EC2のディスクなのか複数サーバー共有なのかで選びます。",
+      "analogy": "EBS＝PCにつなぐディスク、EFS＝ネットワーク共有フォルダ。",
+      "flow": [
+        "EC2",
+        "EBS",
+        " / ",
+        "Multiple compute",
+        "EFS"
+      ],
+      "points": [
+        "EBSはブロックストレージ",
+        "EFSはNFSベースの共有ファイルストレージ",
+        "S3はオブジェクトであり同じファイルシステムではない"
+      ],
+      "connect": "S3/EBS/EFSの違いはAWS初心者が最初に区別したい代表例です。",
+      "terms": [
+        "EBS",
+        "EFS",
+        "ブロック",
+        "ファイル"
+      ],
+      "check": {
+        "question": "複数EC2から同じファイル群へ共有アクセスしたい。候補は？",
+        "choices": [
+          "EFS",
+          "EBSを1台ずつ別々に使う",
+          "Route 53"
+        ],
+        "answer": 0,
+        "explain": "共有ファイルシステム要件ではEFSが代表候補です。"
+      },
+      "source": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html",
+      "legacyTopicId": "ebs-efs"
+    },
+    {
+      "id": "aws-vpc",
+      "chapter": "network",
+      "title": "VPC — AWS内のネットワーク",
+      "minutes": 11,
+      "lead": "AWS上に自分の論理ネットワークを作り、IP範囲・サブネット・経路・通信制御を設計します。",
+      "analogy": "自分専用の街。サブネットは区画、ルートテーブルは道路案内。",
+      "flow": [
+        "VPC",
+        "Public subnet",
+        "Private subnet",
+        "Route table"
+      ],
+      "points": [
+        "CIDRでIP範囲を決める",
+        "サブネットはAZに属する",
+        "ルートテーブルで送信先を決める",
+        "Security GroupとNetwork ACLは作用点が違う"
+      ],
+      "connect": "EC2、RDS、ロードバランサーなど多くのリソース配置の土台になります。",
+      "terms": [
+        "VPC",
+        "CIDR",
+        "Subnet",
+        "Route table"
+      ],
+      "check": {
+        "question": "サブネットが『Public』になるかは何で決まる？",
+        "choices": [
+          "名前にpublicと書く",
+          "インターネットへの経路など構成",
+          "EC2の色"
+        ],
+        "answer": 1,
+        "explain": "名前ではなく、ルートやInternet Gatewayなど実際のネットワーク構成で決まります。"
+      },
+      "source": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
+      "legacyTopicId": "vpc"
+    },
+    {
+      "id": "aws-route53",
+      "chapter": "network",
+      "title": "Route 53 — DNS",
+      "minutes": 6,
+      "lead": "人が使うドメイン名を、接続先へ案内します。",
+      "analogy": "住所録・案内所。",
+      "flow": [
+        "example.com",
+        "Route 53",
+        "Target"
+      ],
+      "points": [
+        "DNSの権威サーバー機能を提供",
+        "ドメイン登録やヘルスチェック/ルーティング機能もある",
+        "CloudFrontやALBなどの入口と組み合わせる"
+      ],
+      "connect": "IT基礎で学んだDNSをAWSサービスとして使う位置です。",
+      "terms": [
+        "Route 53",
+        "DNS",
+        "Hosted Zone"
+      ],
+      "check": {
+        "question": "example.com をALBなどの接続先へ案内したい。候補は？",
+        "choices": [
+          "Route 53",
+          "EBS",
+          "CloudWatch"
+        ],
+        "answer": 0,
+        "explain": "Route 53はDNSサービスとして名前解決を担います。"
+      },
+      "source": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "legacyTopicId": "route53-cloudfront"
+    },
+    {
+      "id": "aws-cloudfront",
+      "chapter": "network",
+      "title": "CloudFront — CDN",
+      "minutes": 7,
+      "lead": "利用者に近いエッジ拠点からコンテンツを配信し、遅延やオリジン負荷を減らします。",
+      "analogy": "人気商品を全国の倉庫へ置いて、近い倉庫から届ける。",
+      "flow": [
+        "User",
+        "Edge location",
+        "CloudFront",
+        "Origin"
+      ],
+      "points": [
+        "CDNとしてエッジから配信",
+        "S3やALBなどをオリジンにできる",
+        "キャッシュにより高速化と負荷軽減が期待できる"
+      ],
+      "connect": "Route 53は名前案内、CloudFrontは配信。役割を混同しないのが重要です。",
+      "terms": [
+        "CloudFront",
+        "CDN",
+        "Origin",
+        "Cache"
+      ],
+      "check": {
+        "question": "世界中へ静的コンテンツを低遅延で配信したい。候補は？",
+        "choices": [
+          "CloudFront",
+          "IAM",
+          "EBS"
+        ],
+        "answer": 0,
+        "explain": "CDNであるCloudFrontが代表候補です。"
+      },
+      "source": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "legacyTopicId": "route53-cloudfront"
+    },
+    {
+      "id": "aws-rds",
+      "chapter": "database",
+      "title": "RDS — リレーショナルDB",
+      "minutes": 9,
+      "lead": "MySQL/PostgreSQLなどのリレーショナルDBをマネージドで利用します。",
+      "analogy": "表同士の関係を持つ整理された台帳。",
+      "flow": [
+        "Application",
+        "RDS",
+        "Tables",
+        "Relations"
+      ],
+      "points": [
+        "リレーショナルDBエンジンを管理しやすく提供",
+        "バックアップや可用性機能を利用できる",
+        "SQL・トランザクション・関係性が重要なデータに向く"
+      ],
+      "connect": "ユーザー、注文、商品など関係を扱うWebアプリでよく登場します。",
+      "terms": [
+        "RDS",
+        "SQL",
+        "Multi-AZ",
+        "Read Replica"
+      ],
+      "check": {
+        "question": "複数テーブルをJOINし、トランザクションを重視したい。候補は？",
+        "choices": [
+          "RDS",
+          "CloudFront",
+          "Route 53"
+        ],
+        "answer": 0,
+        "explain": "リレーショナルな関係とSQLが重要ならRDSが代表候補です。"
+      },
+      "source": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html",
+      "legacyTopicId": "rds"
+    },
+    {
+      "id": "aws-dynamodb",
+      "chapter": "database",
+      "title": "DynamoDB — NoSQL",
+      "minutes": 9,
+      "lead": "キーを中心に高速・大規模にアクセスするマネージドNoSQLデータベースです。",
+      "analogy": "最初に『どのキーで取り出すか』を決めて使う巨大な高速ロッカー。",
+      "flow": [
+        "Partition key",
+        "DynamoDB",
+        "Item"
+      ],
+      "points": [
+        "フルマネージドNoSQL",
+        "アクセスパターンを先に考えることが重要",
+        "水平スケールしやすい",
+        "RDSの単純な代替ではない"
+      ],
+      "connect": "サーバーレス構成や高スケールなキーアクセスでよく使われます。",
+      "terms": [
+        "DynamoDB",
+        "NoSQL",
+        "Partition key"
+      ],
+      "check": {
+        "question": "固定キーで高速アクセスし、大規模スケールを重視する。候補は？",
+        "choices": [
+          "DynamoDB",
+          "RDSしかない",
+          "Route 53"
+        ],
+        "answer": 0,
+        "explain": "キー中心のアクセスパターンと大規模スケールではDynamoDBが候補です。"
+      },
+      "source": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+      "legacyTopicId": "dynamodb"
+    }
+  ]
+}

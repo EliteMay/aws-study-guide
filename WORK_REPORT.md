@@ -1,61 +1,47 @@
 # Work Report
 
-## 2026-09-01 — Initial release
+## 2026-09-03 — Beginner-first learning redesign
+
+### Goal
+
+「AWSを一度も学んだことがない状態」から、このサイトを順番に進めるだけで基本概念と主要サービスの使い分けを理解できる構造へ変更する。
+
+### Research / direction
+
+- 最新 `EliteMay/web-project-guide` の README / START_HERE / Visual Quality Baselineを確認
+- AWS公式の2026年初心者向け学習方針を確認
+- Microsoft LearnのLearning Path / Module型構造を参考に、Lesson単位と所要時間を導入
+- 既存のAWS色・左RailはKEEP、Dashboard / Card中心の学習導線をFIX
 
 ### Implemented
 
-- GitHub Pages向け1ページ学習アプリ構成
-- AWS基礎18トピック
-- 8段階学習ロードマップ
-- 18問クイズ
-- サービス検索
-- カテゴリ絞り込み
-- Topic詳細Dialog
-- 学習済み / 苦手 / ブックマーク
-- クイズ履歴と正答率
-- localStorageによる進捗保存
-- Responsive Sidebar / Mobile layout
-- Keyboard focus / Skip link / reduced motion対応
-- Manifest / Dataset分離
-- Project-specific validator
-- README / Requirements / Specification / Project Learnings
+- AWS以前のIT基礎5Lesson
+- 全10章 / 24Lesson
+- Lesson Reader
+- Lessonごとの確認問題
+- 3段階の理解度
+- 今日の次Lesson
+- 誤答 / 低理解度から作る自動復習キュー
+- AWS構成マップ
+- サービス比較4テーマ
+- 構成シナリオ4問
+- 用語辞書
+- JSONバックアップ
+- 旧 `awsStudyGuide.progress.v1` 互換維持
+- 旧Topic完了から新Lessonへの互換移行
+- 教材Source of Truthを役割別JSONへ整理
+- Responsive / focus-visible / reduced-motion対応
 
-### Content verification
+### Validation
 
-AWS公式ドキュメントを優先し、特に以下を確認して初期教材へ反映した。
-
-- IAM: temporary credentials / roles / MFA / least privilege
-- Well-Architected: 6 pillars
-- Global Infrastructure / Shared Responsibility等の基本概念
-
-料金・Quotaなど変化しやすい数値は初期教材で極力固定していない。
-
-### Validation status
-
-- Implemented: Yes
-- Static Validation: **Passed** on commit `65403655a557bb5b92a56e04d21b3766144707b8`
-- Browser Validated: Unverified
-- Visual Reviewed: Code-level baseline only / 実ブラウザ未確認
-- GitHub Pages Published: **Unverified / repository Pages is not enabled yet**
-- User Validated: Unverified
-
-Static ValidationではReusable Web BaselineとProject validatorの両方が成功した。
-
-GitHub Pages Actions deploymentも試行したが、Repository側でPagesが未有効のため `Configure Pages` がNot Foundで失敗した。コード不具合ではないため失敗Workflowは削除し、静的サイトに適した `main` / root のbranch publishingをREADMEへ記載した。
+- Local `node tests/validate.mjs`: final-state実行対象
+- Local `node --check js/app.js`: Passed
+- GitHub Actions: final commitで確認する
+- Browser / screenshot visual verification: GitHub Pages公開後に確認する
+- User validation: Pending
 
 ### Known limitations
 
-- 進捗は現在のブラウザ端末内のみ。複数端末同期なし。
-- Topic数は初期18件。AWS全サービスを網羅するものではない。
-- URLごとのDeep Link Routerは未実装。
-- 実ブラウザでのVisual / Interaction確認は未実施。
-- GitHub PagesはSettingsで初回有効化が必要。
-
-### Next candidates
-
-- Cloud Practitioner / SAAなど目的別モード
-- Architecture scenario問題
-- 間違えたQuizだけの出題
-- JSON Export / Importによる進捗バックアップ
-- Topicデータのカテゴリ別分割
-- 実ブラウザVisual review後のUI微調整
+- 教材はAWS全サービスを網羅しない。初心者が主要概念をつなげる範囲を優先。
+- 実AWSアカウントを使うハンズオンは未実装。
+- 復習間隔は現時点では誤答・理解度ベースで、Spaced Repetitionの日付スケジューリングは未実装。

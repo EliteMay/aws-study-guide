@@ -1,12 +1,18 @@
 {
-  "schemaVersion": 1,
-  "datasetVersion": "2026.09.01-1",
-  "updatedAt": "2026-09-01",
+  "schemaVersion": 2,
+  "datasetVersion": "2026.09.03-1",
+  "updatedAt": "2026-09-03",
   "files": [
-    "./data/aws-core.json"
+    "./data/course-core.json",
+    "./data/lessons-foundation.json",
+    "./data/lessons-core-services.json",
+    "./data/lessons-advanced.json"
   ],
   "counts": {
-    "topics": 18,
-    "quizQuestions": 18
+    "chapters": 10,
+    "lessons": 24,
+    "comparisons": 4,
+    "scenarios": 4,
+    "glossaryTerms": 15
   }
 }

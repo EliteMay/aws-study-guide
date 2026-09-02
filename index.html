@@ -1,206 +1,90 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AWSを役割・使い分け・構成・クイズで学ぶ個人向け学習ガイド。">
-  <meta name="theme-color" content="#0b1220">
-  <title>AWS Study Guide</title>
-  <link rel="stylesheet" href="./css/styles.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="AWSをIT基礎から順番に学び、サービスの役割・使い分け・構成まで理解する初心者向け学習サイト。">
+<meta name="theme-color" content="#111827"><link rel="canonical" href="https://elitemay.github.io/aws-study-guide/">
+<title>AWS Study Guide | 0から学ぶAWS</title><link rel="stylesheet" href="./css/base.css"><link rel="stylesheet" href="./css/views.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">本文へ移動</a>
+<a class="skip" href="#main">本文へ移動</a>
+<div class="app">
+  <aside class="rail" id="rail">
+    <a class="brand" href="#" data-nav="home"><span class="brandmark">AWS</span><span><strong>AWS Study Guide</strong><small>0 → Architecture</small></span></a>
+    <div class="rail-progress"><div><span>COURSE</span><strong id="railPercent">0%</strong></div><div class="bar"><i id="railBar"></i></div><small id="railMeta">読み込み中…</small></div>
+    <nav class="rail-nav" aria-label="メインナビゲーション">
+      <button class="active" data-nav="home"><span>01</span>ホーム</button>
+      <button data-nav="course"><span>02</span>学習コース</button>
+      <button data-nav="map"><span>03</span>AWS構成マップ</button>
+      <button data-nav="compare"><span>04</span>使い分け</button>
+      <button data-nav="practice"><span>05</span>構成問題</button>
+      <button data-nav="review"><span>06</span>復習</button>
+      <button data-nav="glossary"><span>07</span>用語辞書</button>
+    </nav>
+    <div class="rail-bottom"><button id="backupBtn">学習データを書き出す</button><small id="datasetStatus">Course data</small></div>
+  </aside>
 
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="メインナビゲーション">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">A</div>
-        <div>
-          <p class="brand-title">AWS Study Guide</p>
-          <p class="brand-sub">Learn by architecture</p>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu" id="menuBtn" aria-label="メニューを開く" aria-expanded="false">☰</button>
+      <label class="global-search"><span>⌕</span><input id="searchInput" type="search" placeholder="S3、DNS、データベース…" autocomplete="off"><kbd>/</kbd></label>
+      <div class="top-context"><span id="viewEyebrow">START HERE</span><strong id="viewMini">学習ホーム</strong></div>
+    </header>
+
+    <main id="main">
+      <section class="view active" data-view="home">
+        <div class="home-intro"><div><p class="eyebrow">START FROM ZERO</p><h1>AWSを知らなくても、<br><em>ここから順番に。</em></h1><p>まず「Web・サーバー・ネットワーク・DB」を理解し、そのあとAWSのサービスへ置き換えます。サービス名の暗記から始めません。</p></div><div class="learning-line" aria-label="学習の流れ"><span>IT基礎</span><i>→</i><span>Cloud</span><i>→</i><span>AWS</span><i>→</i><span>構成判断</span></div></div>
+        <section class="today"><div class="today-copy"><p class="section-label">TODAY</p><span id="todayReason">現在の進捗から選んでいます</span><h2 id="todayTitle">次のLessonを準備中…</h2><p id="todayDesc"></p><div class="actions"><button id="todayStart" class="primary">ここから続ける</button><button class="secondary" data-nav="course">全コースを見る</button></div></div><div class="today-side"><div><span>学習済み</span><strong id="statDone">0 / 0</strong></div><div><span>要復習</span><strong id="statReview">0</strong></div><div><span>確認問題</span><strong id="statChecks">0%</strong></div><div><span>推定残り</span><strong id="statMinutes">—</strong></div></div></section>
+        <section class="why"><div class="section-head"><div><p class="section-label">HOW THIS COURSE WORKS</p><h2>1つ覚えたら、前後をつなぐ。</h2></div></div><div class="why-grid"><article><span>01</span><h3>先にIT基礎</h3><p>「DNSとは何か」が分かってからRoute 53へ進む。</p></article><article><span>02</span><h3>図で位置を確認</h3><p>EC2、RDS、S3がシステムのどこにいるかを見る。</p></article><article><span>03</span><h3>比較して区別</h3><p>S3 / EBS / EFSなど、似たものを横並びにする。</p></article><article><span>04</span><h3>要件から選ぶ</h3><p>最後は「この場合どれを使う？」を解く。</p></article></div></section>
+        <section class="chapter-overview"><div class="section-head"><div><p class="section-label">LEARNING PATH</p><h2>学習コース</h2></div><button class="text-btn" data-nav="course">全部見る →</button></div><div id="homeChapters" class="chapter-cards"></div></section>
+      </section>
+
+      <section class="view" data-view="course">
+        <header class="page-head"><div><p class="eyebrow">LEARNING PATH</p><h1>0から学ぶAWS</h1><p>Lessonを飛ばしても使えますが、完全初心者は上から順番がおすすめです。</p></div><div><strong id="coursePercent">0%</strong><span>完了</span></div></header>
+        <div class="course-layout"><aside id="chapterNav" class="chapter-nav"></aside><div id="lessonList" class="lesson-list"></div></div>
+      </section>
+
+      <section class="view" data-view="lesson">
+        <div class="lesson-layout">
+          <aside class="lesson-outline"><button class="back-btn" data-nav="course">← コースへ</button><p class="section-label" id="lessonChapter">CHAPTER</p><div id="lessonSiblings"></div></aside>
+          <article class="lesson-paper">
+            <header class="lesson-head"><div class="lesson-meta"><span id="lessonStep">LESSON</span><span id="lessonMinutes">—分</span><span>初級</span></div><h1 id="lessonTitle"></h1><p id="lessonLead"></p></header>
+            <div id="lessonBody"></div>
+            <section class="lesson-check"><p class="section-label">CHECK YOUR UNDERSTANDING</p><h2 id="checkQuestion"></h2><div id="checkChoices" class="check-choices"></div><div id="checkFeedback" class="check-feedback" hidden></div></section>
+            <section class="confidence"><div><p class="section-label">SELF CHECK</p><h2>今どれくらい説明できる？</h2></div><div id="confidenceBtns"><button data-confidence="1">まだ曖昧</button><button data-confidence="2">だいたい分かる</button><button data-confidence="3">人に説明できる</button></div></section>
+            <footer class="lesson-footer"><button id="prevLesson" class="secondary">← 前へ</button><button id="completeLesson" class="primary">Lessonを完了して次へ</button></footer>
+          </article>
+          <aside class="lesson-side"><section><p class="section-label">CONNECTION</p><h3>AWSではどこにつながる？</h3><p id="lessonConnect"></p></section><section><p class="section-label">KEY TERMS</p><div id="lessonTerms" class="term-chips"></div></section><a id="lessonSource" target="_blank" rel="noreferrer">AWS公式資料 ↗</a></aside>
         </div>
-      </div>
+      </section>
 
-      <nav class="nav-list">
-        <button class="nav-item is-active" type="button" data-view="dashboard">
-          <span class="nav-icon" aria-hidden="true">⌂</span><span>ホーム</span>
-        </button>
-        <button class="nav-item" type="button" data-view="roadmap">
-          <span class="nav-icon" aria-hidden="true">↗</span><span>ロードマップ</span>
-        </button>
-        <button class="nav-item" type="button" data-view="topics">
-          <span class="nav-icon" aria-hidden="true">▦</span><span>サービス学習</span>
-        </button>
-        <button class="nav-item" type="button" data-view="quiz">
-          <span class="nav-icon" aria-hidden="true">?</span><span>クイズ</span>
-        </button>
-        <button class="nav-item" type="button" data-view="review">
-          <span class="nav-icon" aria-hidden="true">★</span><span>復習</span>
-        </button>
-      </nav>
+      <section class="view" data-view="map">
+        <header class="page-head"><div><p class="eyebrow">ARCHITECTURE MAP</p><h1>サービスを「場所」で覚える</h1><p>まず典型的なWebサービスの構成を1枚で理解します。学習済みのサービスは強調されます。</p></div></header>
+        <div class="map-wrap"><div class="map-row"><span>USER</span><button data-open-lesson="it-web">Browser</button></div><i>↓ DNS / 配信</i><div class="map-row"><span>EDGE</span><button data-open-lesson="aws-route53">Route 53</button><button data-open-lesson="aws-cloudfront">CloudFront</button></div><i>↓ Request</i><div class="map-box"><div class="map-title">VPC</div><div class="map-row"><span>COMPUTE</span><button data-open-lesson="aws-elb">ELB</button><button data-open-lesson="aws-ec2">EC2</button><button data-open-lesson="aws-lambda">Lambda</button></div><i>↓ Data</i><div class="map-row"><span>DATA</span><button data-open-lesson="aws-rds">RDS</button><button data-open-lesson="aws-dynamodb">DynamoDB</button><button data-open-lesson="aws-s3">S3</button></div></div><div class="map-foundation"><button data-open-lesson="aws-iam">IAM：誰が何をできるか</button><button data-open-lesson="aws-cloudwatch">CloudWatch：状態を見る</button></div></div>
+      </section>
 
-      <div class="sidebar-progress">
-        <div class="sidebar-progress-head">
-          <span>全体進捗</span><strong id="sidebarProgressText">0%</strong>
-        </div>
-        <div class="progress-track" aria-hidden="true"><span id="sidebarProgressBar"></span></div>
-        <p id="sidebarProgressDetail">教材を読み込んでいます…</p>
-      </div>
-    </aside>
+      <section class="view" data-view="compare">
+        <header class="page-head"><div><p class="eyebrow">COMPARE</p><h1>似たサービスを区別する</h1><p>定義ではなく「何を保存する？」「誰が使う？」「何を管理したい？」で選びます。</p></div></header>
+        <div id="compareList" class="compare-list"></div>
+      </section>
 
-    <div class="workspace">
-      <header class="topbar">
-        <button class="mobile-menu" id="mobileMenu" type="button" aria-label="メニューを開く" aria-expanded="false">☰</button>
-        <div class="search-wrap">
-          <span aria-hidden="true">⌕</span>
-          <label class="sr-only" for="globalSearch">AWSサービスを検索</label>
-          <input id="globalSearch" type="search" placeholder="サービス・用語を検索 例: S3, 監視, NoSQL" autocomplete="off">
-          <kbd>/</kbd>
-        </div>
-        <div class="topbar-status">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span id="datasetStatus">教材読み込み中</span>
-        </div>
-      </header>
+      <section class="view" data-view="practice">
+        <header class="page-head"><div><p class="eyebrow">ARCHITECTURE PRACTICE</p><h1>要件からサービスを選ぶ</h1><p>サービス名を先に見ず、利用者の要件から考えます。</p></div><div><strong id="practiceScore">0 / 0</strong><span>今回</span></div></header>
+        <div id="practiceCard" class="practice-card"></div>
+      </section>
 
-      <main id="main" class="main-content" tabindex="-1">
-        <section class="view is-active" data-view-panel="dashboard" aria-labelledby="dashboardTitle">
-          <div class="hero-grid">
-            <div class="hero-copy">
-              <p class="eyebrow">AWS FOUNDATION</p>
-              <h1 id="dashboardTitle">サービス名ではなく、<br><span>「なぜ使うか」</span>から覚える。</h1>
-              <p class="hero-lead">基礎 → サービスの使い分け → 構成 → クイズまで、AWSの知識を1本につなげる学習ダッシュボード。</p>
-              <div class="hero-actions">
-                <button class="btn btn-primary" type="button" data-go="roadmap">ロードマップから始める</button>
-                <button class="btn btn-secondary" type="button" data-go="topics">サービス一覧を見る</button>
-              </div>
-            </div>
-            <div class="architecture-card" aria-label="AWS学習の構成イメージ">
-              <p class="architecture-label">MENTAL MODEL</p>
-              <div class="architecture-flow">
-                <div class="arch-node arch-user"><span>01</span><strong>要件</strong><small>何を実現したい？</small></div>
-                <div class="arch-line" aria-hidden="true"></div>
-                <div class="arch-node arch-service"><span>02</span><strong>サービス</strong><small>役割で選ぶ</small></div>
-                <div class="arch-line" aria-hidden="true"></div>
-                <div class="arch-node arch-design"><span>03</span><strong>設計</strong><small>組み合わせる</small></div>
-              </div>
-              <p class="architecture-note">暗記ではなく「要件 → 選択 → 理由」を繰り返す。</p>
-            </div>
-          </div>
+      <section class="view" data-view="review">
+        <header class="page-head"><div><p class="eyebrow">REVIEW QUEUE</p><h1>復習</h1><p>確認問題の間違いと「まだ曖昧」を自動で集めます。</p></div></header>
+        <div id="reviewList" class="review-list"></div>
+      </section>
 
-          <div class="metrics-grid" aria-label="学習状況">
-            <article class="metric-card"><p>学習済み</p><strong id="metricCompleted">0</strong><span id="metricCompletedSub">/ 0 topics</span></article>
-            <article class="metric-card"><p>苦手</p><strong id="metricWeak">0</strong><span>あとで集中復習</span></article>
-            <article class="metric-card"><p>ブックマーク</p><strong id="metricBookmarks">0</strong><span>重要ポイント</span></article>
-            <article class="metric-card"><p>クイズ正答率</p><strong id="metricAccuracy">—</strong><span id="metricAttempts">まだ未回答</span></article>
-          </div>
-
-          <div class="dashboard-grid">
-            <section class="panel next-panel" aria-labelledby="nextTitle">
-              <div class="panel-heading">
-                <div><p class="section-kicker">NEXT STEP</p><h2 id="nextTitle">次に学ぶ</h2></div>
-                <button class="text-button" type="button" data-go="roadmap">全体を見る →</button>
-              </div>
-              <div id="nextLesson" class="next-lesson skeleton-block">教材を準備しています…</div>
-            </section>
-
-            <section class="panel quick-panel" aria-labelledby="quickTitle">
-              <div class="panel-heading"><div><p class="section-kicker">QUICK COMPARE</p><h2 id="quickTitle">まず区別したい3組</h2></div></div>
-              <div class="compare-stack">
-                <button class="compare-row" type="button" data-topic="ebs-efs"><span>Storage</span><strong>S3 / EBS / EFS</strong><small>オブジェクト・ブロック・ファイル</small></button>
-                <button class="compare-row" type="button" data-topic="dynamodb"><span>Database</span><strong>RDS / DynamoDB</strong><small>SQL・関係 vs キー・アクセスパターン</small></button>
-                <button class="compare-row" type="button" data-topic="cloudwatch"><span>Operations</span><strong>CloudWatch / CloudTrail</strong><small>状態監視 vs 操作監査</small></button>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <section class="view" data-view-panel="roadmap" aria-labelledby="roadmapTitle">
-          <div class="page-head">
-            <div><p class="eyebrow">LEARNING PATH</p><h1 id="roadmapTitle">AWS学習ロードマップ</h1><p>上から順番に進めれば、サービス単体の暗記ではなく構成までつながる。</p></div>
-            <div class="page-progress"><strong id="roadmapPercent">0%</strong><span>完了</span></div>
-          </div>
-          <div id="roadmapList" class="roadmap-list" aria-live="polite"></div>
-        </section>
-
-        <section class="view" data-view-panel="topics" aria-labelledby="topicsTitle">
-          <div class="page-head">
-            <div><p class="eyebrow">SERVICE LIBRARY</p><h1 id="topicsTitle">サービス学習</h1><p>「役割」「頭の中のイメージ」「比較」を軸に理解する。</p></div>
-            <div class="topic-count" id="topicCount">0 topics</div>
-          </div>
-          <div id="categoryFilters" class="filter-row" aria-label="カテゴリ絞り込み"></div>
-          <div id="topicGrid" class="topic-grid" aria-live="polite"></div>
-          <div id="emptyTopics" class="empty-state" hidden><strong>該当する教材がありません</strong><p>検索語かカテゴリを変えてみてください。</p></div>
-        </section>
-
-        <section class="view" data-view-panel="quiz" aria-labelledby="quizTitle">
-          <div class="page-head">
-            <div><p class="eyebrow">ACTIVE RECALL</p><h1 id="quizTitle">AWSクイズ</h1><p>答えを思い出す練習で、知識を「使える形」にする。</p></div>
-            <div class="quiz-score"><strong id="quizScore">0 / 0</strong><span>今回のスコア</span></div>
-          </div>
-          <div class="quiz-layout">
-            <section class="quiz-card" id="quizCard">
-              <div class="quiz-card-top"><span id="quizCategory">CATEGORY</span><span id="quizPosition">0 / 0</span></div>
-              <h2 id="quizQuestion">教材を読み込んでいます…</h2>
-              <div id="quizChoices" class="quiz-choices"></div>
-              <div id="quizFeedback" class="quiz-feedback" hidden></div>
-              <div class="quiz-actions">
-                <button id="nextQuiz" class="btn btn-primary" type="button" disabled>次の問題</button>
-                <button id="resetQuiz" class="btn btn-secondary" type="button">最初から</button>
-              </div>
-            </section>
-            <aside class="quiz-guide panel">
-              <p class="section-kicker">HOW TO USE</p>
-              <h2>間違えた問題ほど価値がある。</h2>
-              <ol>
-                <li>先に選択肢を見ず、答えを頭で考える</li>
-                <li>なぜ他の選択肢が違うかも確認する</li>
-                <li>迷ったテーマは「苦手」に登録して復習する</li>
-              </ol>
-              <button class="text-button" type="button" data-go="review">苦手テーマを見る →</button>
-            </aside>
-          </div>
-        </section>
-
-        <section class="view" data-view-panel="review" aria-labelledby="reviewTitle">
-          <div class="page-head">
-            <div><p class="eyebrow">REVIEW QUEUE</p><h1 id="reviewTitle">復習</h1><p>自分で付けた「苦手」と「ブックマーク」だけを集める。</p></div>
-            <button id="resetProgress" class="btn btn-danger-ghost" type="button">進捗をリセット</button>
-          </div>
-          <div class="review-columns">
-            <section class="panel"><div class="panel-heading"><div><p class="section-kicker">WEAK</p><h2>苦手テーマ</h2></div><span class="count-pill" id="weakCount">0</span></div><div id="weakList" class="review-list"></div></section>
-            <section class="panel"><div class="panel-heading"><div><p class="section-kicker">BOOKMARK</p><h2>ブックマーク</h2></div><span class="count-pill" id="bookmarkCount">0</span></div><div id="bookmarkList" class="review-list"></div></section>
-          </div>
-        </section>
-      </main>
-    </div>
+      <section class="view" data-view="glossary">
+        <header class="page-head"><div><p class="eyebrow">GLOSSARY</p><h1>用語辞書</h1><p>Lessonで分からない単語が出たらここで止まらず戻れます。</p></div></header>
+        <label class="glossary-search"><span>⌕</span><input id="glossarySearch" type="search" placeholder="例: DNS、AZ、オブジェクトストレージ"></label><div id="glossaryList" class="glossary-list"></div>
+      </section>
+    </main>
   </div>
-
-  <dialog id="topicDialog" class="topic-dialog">
-    <div class="dialog-shell">
-      <div class="dialog-topbar">
-        <div><span id="dialogCategory" class="topic-category">CATEGORY</span><span id="dialogLevel" class="topic-level">LEVEL</span></div>
-        <button id="closeDialog" class="icon-button" type="button" aria-label="閉じる">×</button>
-      </div>
-      <div class="dialog-body">
-        <p id="dialogService" class="dialog-service"></p>
-        <h2 id="dialogTitle"></h2>
-        <p id="dialogSummary" class="dialog-summary"></p>
-        <section class="mental-model"><span>頭の中のイメージ</span><p id="dialogMental"></p></section>
-        <section><h3>ここだけは押さえる</h3><ul id="dialogPoints" class="key-point-list"></ul></section>
-        <section class="compare-box"><h3>比較すると分かる</h3><p id="dialogCompare"></p></section>
-        <section class="exam-box"><h3>判断のコツ</h3><p id="dialogExam"></p></section>
-        <a id="dialogSource" class="source-link" href="#" target="_blank" rel="noreferrer">AWS公式ドキュメントで確認 ↗</a>
-      </div>
-      <div class="dialog-actions">
-        <button id="toggleWeak" class="btn btn-secondary" type="button">苦手に追加</button>
-        <button id="toggleBookmark" class="btn btn-secondary" type="button">☆ ブックマーク</button>
-        <button id="toggleComplete" class="btn btn-primary" type="button">学習済みにする</button>
-      </div>
-    </div>
-  </dialog>
-
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="./js/app.js" defer></script>
-</body>
-</html>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="./js/app.js" defer></script><script src="./js/views.js" defer></script>
+</body></html>

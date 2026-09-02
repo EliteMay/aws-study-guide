@@ -1,0 +1,286 @@
+{
+  "version": "2026.09.03-1",
+  "verified": "2026-09-03",
+  "chapters": [
+    {
+      "id": "it",
+      "title": "0. AWSの前に知るIT基礎",
+      "desc": "Web・サーバー・ネットワーク・DBを先に理解する。",
+      "accent": "IT"
+    },
+    {
+      "id": "cloud",
+      "title": "1. クラウドとAWSの全体像",
+      "desc": "クラウドの意味とAWSの地理・責任範囲をつかむ。",
+      "accent": "FOUNDATION"
+    },
+    {
+      "id": "security",
+      "title": "2. まず守る — IAM",
+      "desc": "誰が何をできるかを最初に整理する。",
+      "accent": "SECURITY"
+    },
+    {
+      "id": "compute",
+      "title": "3. 処理する — EC2 / ELB",
+      "desc": "アプリを動かす場所と負荷分散を理解する。",
+      "accent": "COMPUTE"
+    },
+    {
+      "id": "storage",
+      "title": "4. 保存する — S3 / EBS / EFS",
+      "desc": "保存方式の違いから選べるようにする。",
+      "accent": "STORAGE"
+    },
+    {
+      "id": "network",
+      "title": "5. つなぐ — VPC / Route 53 / CloudFront",
+      "desc": "通信がどこを通るかを理解する。",
+      "accent": "NETWORK"
+    },
+    {
+      "id": "database",
+      "title": "6. データを扱う — RDS / DynamoDB",
+      "desc": "SQLとNoSQLを要件で選ぶ。",
+      "accent": "DATABASE"
+    },
+    {
+      "id": "serverless",
+      "title": "7. サーバーレスと連携",
+      "desc": "Lambdaと疎結合サービスを組み合わせる。",
+      "accent": "SERVERLESS"
+    },
+    {
+      "id": "ops",
+      "title": "8. 運用・監視・コスト",
+      "desc": "作った後に安全・安定・低コストで運用する。",
+      "accent": "OPERATIONS"
+    },
+    {
+      "id": "architecture",
+      "title": "9. 構成を判断する",
+      "desc": "Well-Architectedの観点で全体を見直す。",
+      "accent": "ARCHITECTURE"
+    }
+  ],
+  "comparisons": [
+    {
+      "title": "S3 / EBS / EFS",
+      "columns": [
+        "S3",
+        "EBS",
+        "EFS"
+      ],
+      "rows": [
+        [
+          "種類",
+          "オブジェクト",
+          "ブロック",
+          "ファイル"
+        ],
+        [
+          "イメージ",
+          "クラウド倉庫",
+          "EC2のディスク",
+          "共有フォルダ"
+        ],
+        [
+          "向く要件",
+          "画像・ログ・バックアップ",
+          "OS/アプリのディスク",
+          "複数Computeの共有ファイル"
+        ],
+        [
+          "判断軸",
+          "HTTP/APIでオブジェクト",
+          "ブロックデバイス",
+          "NFS共有"
+        ]
+      ]
+    },
+    {
+      "title": "RDS / DynamoDB",
+      "columns": [
+        "RDS",
+        "DynamoDB"
+      ],
+      "rows": [
+        [
+          "モデル",
+          "リレーショナル",
+          "NoSQL Key-Value/Document"
+        ],
+        [
+          "考え方",
+          "表の関係・SQL",
+          "アクセスパターン・キー"
+        ],
+        [
+          "向く要件",
+          "JOIN/トランザクション",
+          "大規模なキーアクセス"
+        ]
+      ]
+    },
+    {
+      "title": "EC2 / Lambda",
+      "columns": [
+        "EC2",
+        "Lambda"
+      ],
+      "rows": [
+        [
+          "管理",
+          "OSまで自分で管理",
+          "サーバー管理を大きく減らす"
+        ],
+        [
+          "実行",
+          "常時稼働しやすい",
+          "イベント時に実行"
+        ],
+        [
+          "向く要件",
+          "自由度・常駐処理",
+          "短いイベント処理/API"
+        ]
+      ]
+    },
+    {
+      "title": "CloudWatch / CloudTrail",
+      "columns": [
+        "CloudWatch",
+        "CloudTrail"
+      ],
+      "rows": [
+        [
+          "見るもの",
+          "状態・性能・ログ",
+          "誰が何を操作したか"
+        ],
+        [
+          "例",
+          "CPU 90%",
+          "IAM変更者の調査"
+        ],
+        [
+          "一言",
+          "監視",
+          "監査"
+        ]
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "title": "写真共有サイト",
+      "desc": "画像が大量にあり、Webサーバーのディスクへ置きたくない。世界中から閲覧される。",
+      "choices": [
+        "EC2だけに保存",
+        "S3 + CloudFront",
+        "RDSだけ",
+        "CloudTrail"
+      ],
+      "answer": 1,
+      "explain": "画像はS3へオブジェクト保存し、CloudFrontから配信すると役割を分離できます。"
+    },
+    {
+      "title": "注文管理システム",
+      "desc": "顧客・注文・商品が関係し、トランザクションとSQLが重要。",
+      "choices": [
+        "RDS",
+        "S3",
+        "Route 53",
+        "CloudWatch"
+      ],
+      "answer": 0,
+      "explain": "関係性・SQL・トランザクションが重要なのでRDSが代表候補です。"
+    },
+    {
+      "title": "急増するWebアクセス",
+      "desc": "EC2 1台では障害とアクセス急増が不安。複数AZへ分散したい。",
+      "choices": [
+        "ELB + Auto Scaling",
+        "S3だけ",
+        "CloudTrailだけ",
+        "IAM Userを増やす"
+      ],
+      "answer": 0,
+      "explain": "ELBで分散しAuto Scalingで台数を調整、複数AZへ配置する構成が代表です。"
+    },
+    {
+      "title": "非同期の画像処理",
+      "desc": "アップロード直後に処理が集中しても、処理依頼を失わず順番にさばきたい。",
+      "choices": [
+        "SQS + Lambda",
+        "Route 53 + EBS",
+        "CloudFrontだけ",
+        "RDSだけ"
+      ],
+      "answer": 0,
+      "explain": "SQSで依頼をため、Lambdaなどが自分のペースで処理すると疎結合にできます。"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "API",
+      "definition": "プログラム同士が決められた方法で機能やデータをやり取りする窓口。"
+    },
+    {
+      "term": "AZ",
+      "definition": "Availability Zone。リージョン内の独立したインフラロケーション。"
+    },
+    {
+      "term": "CIDR",
+      "definition": "IPアドレス範囲を表す記法。VPCやSubnet設計で使う。"
+    },
+    {
+      "term": "CDN",
+      "definition": "利用者に近い拠点からコンテンツを配信する仕組み。"
+    },
+    {
+      "term": "DNS",
+      "definition": "ドメイン名と接続先情報を対応づける仕組み。"
+    },
+    {
+      "term": "IAM Role",
+      "definition": "AWSサービスやワークロードなどが一時的な認証情報で権限を利用するための仕組み。"
+    },
+    {
+      "term": "リージョン",
+      "definition": "AWSの地理的な提供地域。"
+    },
+    {
+      "term": "サブネット",
+      "definition": "VPCのIP範囲を分割したネットワーク区画。AZに属する。"
+    },
+    {
+      "term": "Security Group",
+      "definition": "主にリソース単位で通信を制御するステートフルな仮想ファイアウォール。"
+    },
+    {
+      "term": "オブジェクトストレージ",
+      "definition": "データをオブジェクトとしてキーで扱う保存方式。S3が代表。"
+    },
+    {
+      "term": "ブロックストレージ",
+      "definition": "ディスクのようにブロック単位で扱う保存方式。EBSが代表。"
+    },
+    {
+      "term": "NoSQL",
+      "definition": "リレーショナルモデル以外を含むDB群の総称。DynamoDBはKey-Value/Document系。"
+    },
+    {
+      "term": "疎結合",
+      "definition": "コンポーネント同士の依存を弱め、変更や障害の影響を減らす設計。"
+    },
+    {
+      "term": "ロードバランサー",
+      "definition": "トラフィックを複数の処理先へ分散する仕組み。"
+    },
+    {
+      "term": "MFA",
+      "definition": "複数の認証要素を使う多要素認証。"
+    }
+  ]
+}
