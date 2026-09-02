@@ -21,9 +21,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .tmp/apply/part* > /tmp/aws_final.b64
+          cat .tmp/apply/part00 .tmp/apply/part01 .tmp/apply/part02 .tmp/apply/part03 .tmp/apply/part04 .tmp/apply/part05 > /tmp/aws_final.b64
           base64 -d /tmp/aws_final.b64 > /tmp/aws_final.tgz
-          echo "c55294e3bf962a34d35b52433c4ecb115872b5f756fdf66bb7e55c8ff098586c  /tmp/aws_final.tgz" | sha256sum -c -
+          echo "52ebc7af30017fdf4d48ee93c196913ff49dead8b6161c87955df669a6eeca9d  /tmp/aws_final.tgz" | sha256sum -c -
           tar -xzf /tmp/aws_final.tgz -C .
           rm -f css/styles.css data/aws-core.json
           rm -rf .tmp/apply
