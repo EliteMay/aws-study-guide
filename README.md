@@ -1,97 +1,51 @@
 # AWS Study Guide
 
-AWSを「サービス名の暗記」ではなく、**役割・使い分け・構成・問題演習**までつなげて学ぶための個人向け学習サイトです。
+AWSを完全初心者から順番に学ぶための個人向け学習サイトです。サービス名の暗記ではなく、**IT基礎 → AWSの役割 → サービス比較 → 構成判断 → 復習**の流れで理解します。
 
 ## Project Profile
 
-`STATIC + DATA + TOOL`
+`STATIC + DATA + TOOL + PUBLIC-CONTENT`
 
-- STATIC: GitHub Pagesでそのまま動作
-- DATA: 学習コンテンツをJSONへ分離
-- TOOL: 進捗・苦手・ブックマークをブラウザへ保存
+## 学習体験
 
-## 主な機能
+- AWS以前のWeb / サーバー / DNS / DB / APIから開始
+- 10章・24LessonのLearning Path
+- Lessonごとの所要時間、例え、要点、AWS内でのつながり
+- 各Lessonの短い理解確認
+- 理解度自己評価（曖昧 / だいたい分かる / 説明できる）
+- AWS構成マップ
+- S3 / EBS / EFSなどの使い分け比較
+- 要件からサービスを選ぶ構成シナリオ
+- 間違い・理解度から自動で作る復習キュー
+- 用語辞書
+- 今日の次Lesson表示
+- 学習データのJSONバックアップ
 
-- 初心者向けAWSロードマップ
-- サービス別の要点解説
-- 「なぜ使うか」「何と比較するか」を重視した説明
-- S3 / EBS / EFS、RDS / DynamoDB、CloudWatch / CloudTrailなどの比較
-- サービス検索・カテゴリ絞り込み
-- 学習済みチェック
-- ブックマーク / 苦手登録
-- クイズと即時解説
-- 学習進捗ダッシュボード
-- `localStorage` による端末内保存
+## 保存
 
-## GitHub Pages
-
-公開URL:
-
-https://elitemay.github.io/aws-study-guide/
-
-初回だけRepositoryの **Settings → Pages** で次を設定します。
-
-```text
-Build and deployment
-Source: Deploy from a branch
-Branch: main
-Folder: / (root)
-```
-
-保存後は `main` の静的ファイルがGitHub Pagesから公開されます。
-
-## ファイル構成
-
-```text
-aws-study-guide/
-├─ index.html
-├─ 404.html
-├─ css/
-│  └─ styles.css
-├─ js/
-│  └─ app.js
-├─ data/
-│  ├─ manifest.json
-│  └─ aws-core.json
-├─ tests/
-│  └─ validate.mjs
-├─ REQUIREMENTS.md
-├─ SPEC.md
-├─ PROJECT_LEARNINGS.md
-├─ WORK_REPORT.md
-└─ .github/workflows/validate.yml
-```
-
-## データ保存
-
-ユーザーの進捗のみブラウザの `localStorage` に保存します。
-
-保存キー:
+進捗はブラウザの `localStorage` に保存します。
 
 ```text
 awsStudyGuide.progress.v1
 ```
 
-教材そのものはGitHub上のJSONを正本とします。
+旧版と同じ保存キーを維持し、旧Topicの完了情報は `legacyTopicId` を使って新Lessonへ可能な範囲で引き継ぎます。
 
-## Validation
+## 教材データ
 
-push / pull request時にGitHub Actionsで次を確認します。
+教材の正本は `data/course-core.json` と3つの `data/lessons-*.json` です。`data/manifest.json` はVersion・読込対象・件数の検証用です。
 
-- JavaScript構文
-- JSON構文
-- Manifest件数
-- Topic / Quiz ID参照
-- 必須フィールド
-- `index.html` のローカル参照
-- 公開ファイルへの典型的な秘密情報混入
+## 開発・検証
 
-共通Baselineは `EliteMay/.github` のReusable WorkflowをCommit SHA固定で利用し、Project固有Validationは `tests/validate.mjs` に残しています。
+```bash
+node tests/validate.mjs
+node --check js/app.js
+```
 
-## 情報方針
+制作判断の正本は `EliteMay/web-project-guide` の最新状態です。
 
-AWSの仕様は変化するため、教材更新時はAWS公式ドキュメントを優先して確認します。特に料金、上限、推奨構成、サービス名変更は固定知識として扱いません。
+## 公開
 
-## 開発ルール
+GitHub Pages: `https://elitemay.github.io/aws-study-guide/`
 
-制作判断の正本は `EliteMay/web-project-guide` の最新状態です。現在の実装では、GitHub Pagesの相対パス、JSON分離、保存互換性、Visual Quality、Static Validationを重視します。
+Pagesが未有効の場合は Repository Settings → Pages で `main` / `/ (root)` を公開元にします。

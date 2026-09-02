@@ -1,0 +1,346 @@
+{
+  "lessons": [
+    {
+      "id": "it-web",
+      "chapter": "it",
+      "title": "Webサイトはどう動く？",
+      "minutes": 7,
+      "lead": "ブラウザにURLを入れてから画面が出るまでを、まず1本の流れで理解します。",
+      "analogy": "レストランで注文すると、店員が厨房へ伝え、料理が返ってくる流れに近い。",
+      "flow": [
+        "Browser",
+        "DNS",
+        "Server",
+        "Database / Storage",
+        "Response"
+      ],
+      "points": [
+        "ブラウザはサーバーへリクエストを送り、結果を受け取って表示する",
+        "画面の裏では複数の役割が連携している",
+        "AWSではこの役割ごとにサービスを選ぶことになる"
+      ],
+      "connect": "この基本形が後で Route 53 → CloudFront → EC2/Lambda → RDS/S3 へ置き換わります。",
+      "terms": [
+        "ブラウザ",
+        "リクエスト",
+        "レスポンス"
+      ],
+      "check": {
+        "question": "Webサイトを開くとき、画面を返す処理を行う代表的な役割は？",
+        "choices": [
+          "サーバー",
+          "キーボード",
+          "モニター",
+          "プリンター"
+        ],
+        "answer": 0,
+        "explain": "サーバーがリクエストを受け、必要な処理をしてレスポンスを返します。"
+      },
+      "source": "https://developer.mozilla.org/ja/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work",
+      "legacyTopicId": null
+    },
+    {
+      "id": "it-server",
+      "chapter": "it",
+      "title": "サーバーとは？",
+      "minutes": 6,
+      "lead": "サーバーは『大きいPC』ではなく、他のプログラムや利用者へ機能を提供する役割です。",
+      "analogy": "受付窓口。利用者から要求を受けて、決められた処理をして返す。",
+      "flow": [
+        "Client",
+        "Request",
+        "Server",
+        "Response"
+      ],
+      "points": [
+        "WebサーバーはHTTPリクエストを受ける",
+        "同じ物理マシンでも複数のサーバー役割を動かせる",
+        "クラウドでは仮想サーバーを必要なときに作れる"
+      ],
+      "connect": "AWSのEC2は『クラウド上で借りる仮想サーバー』として理解すると入りやすいです。",
+      "terms": [
+        "クライアント",
+        "サーバー",
+        "HTTP"
+      ],
+      "check": {
+        "question": "EC2を学ぶ前に覚えるべきサーバーの本質は？",
+        "choices": [
+          "必ず巨大なPCである",
+          "他へ機能を提供する役割",
+          "必ず24時間人が操作する",
+          "データ保存専用"
+        ],
+        "answer": 1,
+        "explain": "サーバーは機械の大きさではなく、要求を受けて機能を提供する役割として考えます。"
+      },
+      "source": "https://developer.mozilla.org/ja/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_web_server",
+      "legacyTopicId": null
+    },
+    {
+      "id": "it-network",
+      "chapter": "it",
+      "title": "IPアドレス・DNS・ネットワーク",
+      "minutes": 9,
+      "lead": "通信相手をどう見つけ、どこへデータを届けるかを理解します。",
+      "analogy": "住所がIP、電話帳がDNS、道路がネットワーク。",
+      "flow": [
+        "example.com",
+        "DNS",
+        "IP address",
+        "Network",
+        "Server"
+      ],
+      "points": [
+        "IPアドレスはネットワーク上の宛先を表す",
+        "DNSは名前をIPアドレスなどへ対応づける仕組み",
+        "ルーティングはデータをどの経路へ送るかを決める"
+      ],
+      "connect": "Route 53はDNS、VPCはAWS内ネットワーク設計へつながります。",
+      "terms": [
+        "IPアドレス",
+        "DNS",
+        "ルーティング"
+      ],
+      "check": {
+        "question": "DNSの役割として最も近いものは？",
+        "choices": [
+          "名前と宛先を対応づける",
+          "画像を圧縮する",
+          "CPUを増やす",
+          "DBをバックアップする"
+        ],
+        "answer": 0,
+        "explain": "DNSは人が扱いやすい名前とネットワーク上の宛先情報を対応づけます。"
+      },
+      "source": "https://developer.mozilla.org/ja/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_domain_name",
+      "legacyTopicId": null
+    },
+    {
+      "id": "it-storage-db",
+      "chapter": "it",
+      "title": "ストレージとデータベース",
+      "minutes": 8,
+      "lead": "『データを保存する』でも、ファイルを置くのか、検索・更新したいデータを持つのかで役割が違います。",
+      "analogy": "倉庫がストレージ、整理された台帳がデータベース。",
+      "flow": [
+        "Files",
+        "Storage",
+        "Application data",
+        "Database"
+      ],
+      "points": [
+        "画像やバックアップなどはストレージが得意",
+        "ユーザー・注文・在庫など関係を持つデータはDBが得意",
+        "保存先はアクセス方法と更新方法で選ぶ"
+      ],
+      "connect": "AWSではS3/EBS/EFSがストレージ、RDS/DynamoDBがデータベースの代表です。",
+      "terms": [
+        "ストレージ",
+        "データベース",
+        "SQL"
+      ],
+      "check": {
+        "question": "ユーザー名・メール・注文履歴を検索/更新したい。まず候補になるのは？",
+        "choices": [
+          "データベース",
+          "DNS",
+          "CDN",
+          "ロードバランサー"
+        ],
+        "answer": 0,
+        "explain": "構造化した情報を検索・更新する中心はデータベースです。"
+      },
+      "source": "https://aws.amazon.com/what-is/database/",
+      "legacyTopicId": null
+    },
+    {
+      "id": "it-api",
+      "chapter": "it",
+      "title": "APIとは？",
+      "minutes": 6,
+      "lead": "APIはプログラム同士が決められた方法で機能やデータをやり取りする窓口です。",
+      "analogy": "レストランのメニュー。頼める内容と頼み方が決まっている。",
+      "flow": [
+        "App A",
+        "API request",
+        "Service",
+        "API response"
+      ],
+      "points": [
+        "APIは呼び出し方の契約を定める",
+        "Web APIではHTTPがよく使われる",
+        "画面と処理を分けると複数クライアントから使いやすい"
+      ],
+      "connect": "Amazon API GatewayはAPIの入口、Lambdaはその後ろの処理としてよく組み合わせます。",
+      "terms": [
+        "API",
+        "エンドポイント",
+        "JSON"
+      ],
+      "check": {
+        "question": "APIの説明として最も近いものは？",
+        "choices": [
+          "プログラム同士の決められた窓口",
+          "サーバーの物理ラック",
+          "画像保存形式",
+          "暗号化方式"
+        ],
+        "answer": 0,
+        "explain": "APIは別のプログラムから機能やデータを利用するための契約・窓口です。"
+      },
+      "source": "https://aws.amazon.com/what-is/api/",
+      "legacyTopicId": null
+    },
+    {
+      "id": "cloud-basics",
+      "chapter": "cloud",
+      "title": "クラウドとは？ AWSとは？",
+      "minutes": 8,
+      "lead": "自前で機械を買う代わりに、必要なITリソースをサービスとして利用する考え方です。",
+      "analogy": "自家発電設備を持つ代わりに電力会社から必要な分を使うイメージ。",
+      "flow": [
+        "Need",
+        "Cloud service",
+        "Use",
+        "Scale / Stop"
+      ],
+      "points": [
+        "必要なときにリソースを利用できる",
+        "物理設備管理の一部をクラウド事業者へ移せる",
+        "使い方次第で可用性・安全性・コストは変わる"
+      ],
+      "connect": "AWSはコンピューティング、ストレージ、ネットワーク、DBなどを多数のサービスとして提供します。",
+      "terms": [
+        "クラウド",
+        "オンプレミス",
+        "AWS"
+      ],
+      "check": {
+        "question": "クラウドを使えば自動的に安全・安価・高可用になる？",
+        "choices": [
+          "常にそうなる",
+          "設計と設定が必要"
+        ],
+        "answer": 1,
+        "explain": "クラウドは選択肢を提供しますが、最適化は利用者の設計と設定に依存します。"
+      },
+      "source": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/introduction.html",
+      "legacyTopicId": "cloud-basics"
+    },
+    {
+      "id": "aws-region",
+      "chapter": "cloud",
+      "title": "リージョンとAZ",
+      "minutes": 7,
+      "lead": "AWSのリソースを『世界のどこに置くか』と『同じ地域内でどう分散するか』を理解します。",
+      "analogy": "リージョン＝都市圏、AZ＝同じ都市圏にある独立した施設群。",
+      "flow": [
+        "Region",
+        "AZ-A",
+        "AZ-B",
+        "AZ-C"
+      ],
+      "points": [
+        "多くのサービスはリージョンを選んで使う",
+        "AZはリージョン内の独立したロケーション",
+        "複数AZへ分散すると単一AZ障害に強くしやすい"
+      ],
+      "connect": "EC2やRDSの高可用性設計で『複数AZ』が頻繁に登場します。",
+      "terms": [
+        "リージョン",
+        "AZ",
+        "Multi-AZ"
+      ],
+      "check": {
+        "question": "同一リージョン内で可用性を高める基本は？",
+        "choices": [
+          "1つのAZに集中",
+          "複数AZへ分散",
+          "同じEC2を再起動し続ける",
+          "DNSを削除する"
+        ],
+        "answer": 1,
+        "explain": "複数AZへの分散は単一AZ障害の影響を減らす基本です。"
+      },
+      "source": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "legacyTopicId": "regions-az"
+    },
+    {
+      "id": "aws-responsibility",
+      "chapter": "cloud",
+      "title": "責任共有モデル",
+      "minutes": 7,
+      "lead": "クラウドだから全部AWS任せ、ではありません。何をAWSが守り、何を利用者が設定するかを分けます。",
+      "analogy": "賃貸マンション。建物は管理会社、部屋の鍵や中の物は入居者。",
+      "flow": [
+        "AWS",
+        "Security OF cloud",
+        "Customer",
+        "Security IN cloud"
+      ],
+      "points": [
+        "AWSはクラウド基盤を保護する",
+        "利用者はデータ・権限・各種設定などを管理する",
+        "利用サービスによって利用者側の責任範囲は変わる"
+      ],
+      "connect": "EC2ではOS管理の責任が大きく、マネージドサービスではAWSへ任せる範囲が増えます。",
+      "terms": [
+        "責任共有モデル",
+        "Security of the cloud",
+        "Security in the cloud"
+      ],
+      "check": {
+        "question": "EC2上のゲストOSのパッチは基本的に誰の責任？",
+        "choices": [
+          "AWSだけ",
+          "利用者",
+          "DNS事業者"
+        ],
+        "answer": 1,
+        "explain": "EC2のゲストOSやアプリケーション管理は利用者側の責任です。"
+      },
+      "source": "https://aws.amazon.com/jp/compliance/shared-responsibility-model/",
+      "legacyTopicId": "shared-responsibility"
+    },
+    {
+      "id": "aws-iam",
+      "chapter": "security",
+      "title": "IAM — 誰が何をできる？",
+      "minutes": 10,
+      "lead": "AWSを触り始める前に、認証と認可の中心であるIAMを理解します。",
+      "analogy": "会社の社員証＋入室権限表。",
+      "flow": [
+        "Principal",
+        "Policy",
+        "AWS resource",
+        "Allow / Deny"
+      ],
+      "points": [
+        "最小権限を基本にする",
+        "ワークロードにはIAMロールを使い長期キーを減らす",
+        "rootユーザーは日常利用せず保護する",
+        "MFAなど多層防御を使う"
+      ],
+      "connect": "EC2からS3へアクセスするときも、アクセスキー直書きよりIAMロールが基本です。",
+      "terms": [
+        "IAM",
+        "Policy",
+        "Role",
+        "MFA"
+      ],
+      "check": {
+        "question": "EC2からS3へ安全にアクセスさせる代表的な方法は？",
+        "choices": [
+          "アクセスキーをコードへ直書き",
+          "IAMロールをEC2へ付与",
+          "S3を全公開"
+        ],
+        "answer": 1,
+        "explain": "ワークロードにはIAMロールを利用し、一時的な認証情報を使う設計が基本です。"
+      },
+      "source": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+      "legacyTopicId": "iam"
+    }
+  ]
+}
